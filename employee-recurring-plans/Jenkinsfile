@@ -1,0 +1,37 @@
+pipeline{
+    agent any
+        tools {
+            maven 'maven_3_9_5'
+        }
+    stages{
+        stage('Build Maven'){
+            steps{
+                    checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'need to add git url']])
+                    bat 'mvn clean install'
+            }
+        }
+        stage('Build Docker Image'){
+            steps{
+                script {
+                  bat 'docker build -t talladi412/employee-recurring-plans.jar .'
+                }
+            }
+        }
+        stage('Push Image to Hub'){
+            steps{
+                script {
+                   withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
+                                        bat 'docker login -u talladi412 -p %dockerhubpwd%'}
+                  bat 'docker push talladi412/employee-recurring-plans.jar'
+                }
+            }
+        }
+        stage('Deploy to K8s'){
+            steps{
+                script {
+                    kubernetesDeploy(kubeconfigId: 'k8sconfigpwd',configs: 'app-deployment.yml')
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-recurring-plans
+spec:
+  selector:
+    matchLabels:
+      app: employee-recurring-plans
+  replicas: 2 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: employee-recurring-plans
+    spec:
+      containers:
+        - name: employee-recurring-plans
+          image: employee-recurring-plans:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+              - containerPort: 8082
+          env: # Setting Environmental Variables
+              - name: DB_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: db-config
+                    key: host
+              - name: DB_NAME
+                valueFrom:
+                  configMapKeyRef:
+                    name: db-config
+                    key: dbName
+              - name: DB_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: mysql-secrets
+                    key: username
+              - name: DB_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: mysql-secrets
+                    key: password
+---
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes' resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: employee-recurring-plans
+spec:
+  selector:
+    app: employee-recurring-plans
+  ports:
+    - protocol: "TCP"
+      port: 8082 # The port that the service is running on in the cluster
+      targetPort: 8082 # The port exposed by the service
+  type: NodePort # type of the service.
