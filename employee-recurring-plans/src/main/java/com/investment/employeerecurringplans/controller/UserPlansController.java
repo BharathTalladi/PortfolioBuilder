@@ -30,11 +30,7 @@ public class UserPlansController {
     }
     @PostMapping("/createUserPlanByEmployee")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<RecurringPlanEmployerResponse> createUserPlanByEmployee(@RequestBody RecurringPlanEmployerRequest request,Authentication authentication) throws ParseException{
-        String userId=getUserIdFromAuthentication(authentication);
-        if (!userId.equals(request.getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+    public ResponseEntity<RecurringPlanEmployerResponse> createUserPlanByEmployee(@RequestBody RecurringPlanEmployerRequest request) throws ParseException{
         return ResponseEntity.ok(userPlanService.createUserPlanByEmployee(request));
     }
     @GetMapping("/getUserPlanById/{id}")
@@ -61,12 +57,8 @@ public class UserPlansController {
         return ResponseEntity.ok(userPlanService.editUserContributions(request,id));
     }
     @PatchMapping("/editEmployerContributions/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or authentication.principal.equals(#id)")
-    public ResponseEntity<RecurringPlanEmployerResponse> editEmployerContributions(@RequestBody RecurringPlanEmployerRequest request,@PathVariable String id,Authentication authentication){
-        String userId=getUserIdFromAuthentication(authentication);
-        if (!userId.equals(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RecurringPlanEmployerResponse> editEmployerContributions(@RequestBody RecurringPlanEmployerRequest request,@PathVariable String id){
         return ResponseEntity.ok(userPlanService.editEmployerContributions(request,id));
     }
     // Helper method to extract user ID from authentication
