@@ -21,17 +21,17 @@ public class UserPlansController {
 
     @PostMapping("/createUserPlan")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<RecurringPlanUserResponse> createPlan(@RequestBody RecurringPlanUserRequest request,Authentication authentication ) throws ParseException {
+    public ResponseEntity<RecurringPlanUserResponse> createPlanByUser(@RequestBody RecurringPlanUserRequest request,Authentication authentication ) throws ParseException {
         String userId=getUserIdFromAuthentication(authentication);
         if (!userId.equals(request.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(userPlanService.createUserPlan(request));
     }
-    @PostMapping("/createUserPlanByEmployee")
+    @PostMapping("/createUserPlanByEmployer")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<RecurringPlanEmployerResponse> createUserPlanByEmployee(@RequestBody RecurringPlanEmployerRequest request) throws ParseException{
-        return ResponseEntity.ok(userPlanService.createUserPlanByEmployee(request));
+    public ResponseEntity<RecurringPlanEmployerResponse> createUserPlanByEmployer(@RequestBody RecurringPlanEmployerRequest request) throws ParseException{
+        return ResponseEntity.ok(userPlanService.createUserPlanByEmployer(request));
     }
     @GetMapping("/getUserPlanById/{id}")
     @PreAuthorize("hasAuthority('USER') or authentication.principal.equals(#id)")
@@ -44,7 +44,7 @@ public class UserPlansController {
     }
     @GetMapping("/getAllUsersPlan")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<RecurringPlanResponse>> getUserAllUserPlan() throws ParseException{
+    public ResponseEntity<List<RecurringPlanResponse>> getAllUsersPlan() throws ParseException{
         return ResponseEntity.ok(userPlanService.getAllUsersPlan());
     }
     @PatchMapping("/editUserContributions/{id}")

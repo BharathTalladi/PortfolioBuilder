@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserPlanService {
 
     RecurringPlanUserResponse createUserPlan(RecurringPlanUserRequest request) throws ParseException;
-    RecurringPlanEmployerResponse createUserPlanByEmployee(RecurringPlanEmployerRequest request) throws ParseException;
+    RecurringPlanEmployerResponse createUserPlanByEmployer(RecurringPlanEmployerRequest request) throws ParseException;
     RecurringPlanResponse getUserPlanById(String id) throws ParseException;
     List<RecurringPlanResponse> getAllUsersPlan() throws ParseException;
     RecurringPlanUserResponse editUserContributions(RecurringPlanUserRequest request, String id) throws ParseException;

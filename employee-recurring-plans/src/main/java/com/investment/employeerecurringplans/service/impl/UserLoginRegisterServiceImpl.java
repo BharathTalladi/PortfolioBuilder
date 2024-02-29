@@ -43,8 +43,8 @@ public class UserLoginRegisterServiceImpl implements UserLoginRegisterService {
 
 
     public LoginResponse authenticate(LoginRequest request) {
-        if (request.getEmailId() == null || request.getId() == null) {
-            return new LoginResponse("User login failed", "Both email ID and ID are required");
+        if (request.getId() == null) {
+            return new LoginResponse("User login failed", "Id must be present","Role cannot be provided");
         }
         /*try {
             authenticationManager.authenticate(
@@ -59,7 +59,7 @@ public class UserLoginRegisterServiceImpl implements UserLoginRegisterService {
         }*/
         Optional<User> optionalUser = userRepository.findById(request.getId());
         if (optionalUser.isEmpty()) {
-            return new LoginResponse("User login failed","Cannot provide token");
+            return new LoginResponse("User login failed","Cannot provide token","Cannot provide role");
         }
         User user = optionalUser.get();
         String jwtToken = jwtService.generateToken(user.getId());
@@ -67,6 +67,7 @@ public class UserLoginRegisterServiceImpl implements UserLoginRegisterService {
         LoginResponse loginResponse=new LoginResponse();
         loginResponse.setMessage("User login successful");
         loginResponse.setToken(jwtToken);
+        loginResponse.setRole(user.getRoles().name());
         //loginResponse.setRefreshToken(refreshJwtToken);
         return loginResponse;
 

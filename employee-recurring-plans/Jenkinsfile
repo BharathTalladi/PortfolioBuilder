@@ -6,7 +6,7 @@ pipeline{
     stages{
         stage('Build Maven'){
             steps{
-                    checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'need to add git url']])
+                    checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/BharathTalladi/PortfolioBuilder/tree/master/employee-recurring-plans']])
                     bat 'mvn clean install'
             }
         }

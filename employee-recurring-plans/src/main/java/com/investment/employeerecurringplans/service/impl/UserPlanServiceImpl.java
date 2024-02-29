@@ -81,7 +81,7 @@ public class UserPlanServiceImpl implements UserPlanService {
                 selfContributionAmount.getSelf_contribution_amount_ROTHIRA();
         return salary - totalSelfContributionAmount;
     }
-    public RecurringPlanEmployerResponse createUserPlanByEmployee(RecurringPlanEmployerRequest request) {
+    public RecurringPlanEmployerResponse createUserPlanByEmployer(RecurringPlanEmployerRequest request) {
         // Check if user exists in the database
         Optional<UserRecurringPlanDetails> userRecurringPlanDetails = userRecurringPlanDetailsRepository.findByUserId(request.getId());
         if (userRecurringPlanDetails.isEmpty()) {

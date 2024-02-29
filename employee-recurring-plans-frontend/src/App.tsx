@@ -1,33 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import FooterComponent from './Components/FooterComponent'
+import HeaderComponent from './Components/HeaderComponent'
+import LoginComponent from './Components/LoginComponent'
+import {Routes,Route,Navigate } from 'react-router-dom'
+import { isUserLoggedIn } from './Service/Service'
+import RegisterComponent from './Components/RegisterComponent'
+import UserPlanComponent from './Components/UserPlanComponent'
+import EmployerUserPlansComponent from './Components/EmployerUserPlansComponent'
+import EditEmployerContributionsComponent from './Components/EditEmployerContributionsComponent'
+import EditUserContributionsComponent from './Components/EditUserContributionsComponent'
 
 function App() {
-  const [count, setCount] = useState(0)
 
+
+  function AuthenticatedRoute({ children }: { children: React.ReactNode }){
+    const isUserAuthenticated=isUserLoggedIn();
+    if(isUserAuthenticated){
+      return children;
+    }
+    return <Navigate to="/"/>
+  }
+  
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    
+      <HeaderComponent/>
+      <Routes>
+        <Route path="/" element={<LoginComponent/>}></Route>
+        <Route path="/login" element={<LoginComponent/>}></Route>
+        <Route path="/register" element={<RegisterComponent/>}></Route>
+        <Route path="/getUserPlanById/:id" element={<AuthenticatedRoute><UserPlanComponent/></AuthenticatedRoute>}></Route>
+        <Route path="/editUserContributions/:id" element={<AuthenticatedRoute><EditUserContributionsComponent/></AuthenticatedRoute>}></Route>
+        <Route path="/editEmployerContributions/:id" element={<AuthenticatedRoute><EditEmployerContributionsComponent/></AuthenticatedRoute>}></Route>
+        <Route path="/getAllUsersPlan" element={<AuthenticatedRoute><EmployerUserPlansComponent/></AuthenticatedRoute>}></Route>
+      </Routes>
+      <FooterComponent/>
+    
     </>
   )
 }

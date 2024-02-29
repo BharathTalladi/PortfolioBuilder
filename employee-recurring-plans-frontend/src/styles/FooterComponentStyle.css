@@ -1,0 +1,28 @@
+.footer-component {
+    background-color: #F2F2F2;
+    padding: 5px;  
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  
+}
+.footer-right{
+    font: 12px Arial, sans-serif;
+    color: #0E67A9;
+    margin-right: 10p;
+}
+  
+.copyright {
+    color: #000000;
+}
+.us-only {    
+    margin-left: 9px;
+    margin-bottom: 5px;
+}
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    margin: 0px 10px 0px 5px;
+}
