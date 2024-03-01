@@ -180,6 +180,7 @@ public class UserPlanServiceImpl implements UserPlanService {
         List<EmployerContributionsToUser> employerContributionsList = employerContributionsToUserRepository.findAll();
         for(UserRecurringPlanDetails userDetails:userDetailsList){
             RecurringPlanResponse response = new RecurringPlanResponse();
+            response.setId(userDetails.getUserId());
             response.setAge(calculateAge(userDetails.getDob()));
             response.setSelfContributionAmount(getSelfContributionAmount(userDetails));
             TotalContributionAmount totalContributionAmount = new TotalContributionAmount();

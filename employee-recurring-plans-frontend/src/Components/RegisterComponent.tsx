@@ -10,7 +10,7 @@ const RegisterComponent = ()=>{
     const [password,setPassword] = useState('')
     const navigate = useNavigate();
 
-    const userRegister = (u) =>{
+    const userRegister = (u: React.MouseEvent<HTMLButtonElement>) =>{
         u.preventDefault();
         const user={name,emailId,password};
         console.log(user);

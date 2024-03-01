@@ -7,17 +7,10 @@ interface User {
     emailId: string;
     password: string;
 }
-interface AdminUser {
-    name: string;
-    emailId: string;
-    password: string;
-    roles:string;
-}
 interface login{
     id:string;
     password:string;
 }
-
 const config = {
     headers: {
         'Content-Type': 'application/json'
@@ -26,9 +19,6 @@ const config = {
 
 export const registerUser = (userData : User) =>{
     return axios.post(`${BASE_API_URL}/register`, userData, config);
-}
-export const registerAdminUser = (adminUserData: AdminUser)=>{
-    return axios.post(`${BASE_API_URL}/register`,adminUserData,config);
 }
 export const storeToken = (token: string)=>{
     return localStorage.setItem("token",token);
@@ -92,13 +82,10 @@ export const getAllUsersPlan = () =>{
     return axios.get(`${BASE_API_URL}/getAllUsersPlan`,authConfig);
 }
 export const getUserPlanById= (id: string)=>{
-    console.log(authConfig);
     return axios.get(`${BASE_API_URL}/getUserPlanById/${id}`,authConfig);
 }
 export const editEmployerContributions= (id: string)=>{
-    
     return axios.get(`${BASE_API_URL}/editEmployerContributions/${id}`,authConfig);
-    
 }
 export const editUserContributions= (id: string)=>{
     return axios.get(`${BASE_API_URL}/editUserContributions/${id}`,authConfig);
