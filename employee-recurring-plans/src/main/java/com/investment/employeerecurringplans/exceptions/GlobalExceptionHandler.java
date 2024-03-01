@@ -32,4 +32,13 @@ public class GlobalExceptionHandler {
                         LocalDateTime.now());
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(UserDetailsNotFoundException.class)
+    public ResponseEntity<?> UserDetailsNotFoundException(Exception exception, WebRequest request){
+        ErrorResponse errorDetails =
+                new ErrorResponse(request.getDescription(false), HttpStatus.OK,
+                        exception.getMessage(),
+                        LocalDateTime.now());
+        return new ResponseEntity<>(errorDetails, HttpStatus.OK);
+    }
 }
