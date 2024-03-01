@@ -1,6 +1,6 @@
 import {useState}  from 'react';
-import { useNavigate,Link, } from 'react-router-dom';
-import { loginUser,saveLoggedInUser,storeToken } from '../Service/Service';
+import { useNavigate,Link} from 'react-router-dom';
+import { loginUser,saveLoggedInUser,storeToken,isAdminUser } from '../Service/Service';
 import { LockOutlined } from "@mui/icons-material";
 import { Container, CssBaseline,Box,Avatar, Typography,TextField,Button, Grid,} from "@mui/material";
 
@@ -10,17 +10,19 @@ const LoginComponent = ()=>{
     const [id,setId]=useState('');
     const navigate = useNavigate();
 
-    async function userLogin(e){
+    async function userLogin(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
 		const loginData = { id, password };
-        console.log("Request Payload:", loginData);
         await loginUser(loginData).then((response) => {
-            console.log(response.data);
             const token = 'Bearer ' + response.data.token;
             const role=response.data.role;
             storeToken(token);
             saveLoggedInUser(id,role);
-            navigate(`/getUserPlanById/${id}`)
+            if (isAdminUser()) {
+                navigate('/getAllUsersPlan');
+            } else {
+                navigate(`/getUserPlanById/${id}`);
+            }
             //window.location.reload(false);
         }).catch(error => {
             console.error(error);
