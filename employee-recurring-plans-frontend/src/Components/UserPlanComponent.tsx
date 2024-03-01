@@ -18,7 +18,6 @@ interface UserData {
 const UserPlanComponent = () => {
     const { id } = useParams<{ id?: string }>();
     const [userData, setUserData] = useState<UserData | null>(null);
-    const [loading, setLoading] = useState(true);
     const navigate=useNavigate()
 
     useEffect(() => {
@@ -27,15 +26,10 @@ const UserPlanComponent = () => {
                 if (id) {
                     const response = await getUserPlanById(id);
                     console.log(response);
-                    if(response == null){
-                        navigate('/createRecurringPlanByUser');
-                    }
-                    setUserData(response.data);
+                    response?.data?.errorMeesage? navigate('/createRecurringPlanByUser') : setUserData(response.data);
                 }
             } catch (error) {
                 console.error('Error fetching user plan:', error);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -44,13 +38,9 @@ const UserPlanComponent = () => {
         }
     }, [id,navigate]);
 
-    return (
-        <>
-            {!loading && (
+    return ( userData?.age ? (
                 <TableContainer component={Paper}>
-                    {userData !== null ? (
-                        <>
-                            <Table>
+                           <Table>
                                 <TableHead sx={{ marginTop:"10px" }} >
                                     <TableRow>
                                         <TableCell colSpan={4}>
@@ -112,15 +102,16 @@ const UserPlanComponent = () => {
                                     <TableCell>{userData.totalContributionAmount.total_contribution_amount_ROTHIRA}</TableCell>
                                 </TableRow>
                             </Table>
-                        </>
+                    </TableContainer>
                     ) : (
+                        <>
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         <Button sx={{ marginLeft: "10px", backgroundColor: "#FFF" }} variant="contained">
                             <NavLink to="/createUserPlan">Create User Plan</NavLink>
                         </Button>
-                    )}
-                </TableContainer>
-            )}
-        </>
+                        </>
+                    )
+                
     );
 };
 
