@@ -37,7 +37,6 @@ const UserPlanComponent = () => {
             fetchData();
         }
     }, [id,navigate]);
-
     return ( userData?.age ? (
                 <TableContainer className='TableContainer'>
                            <Table>
@@ -119,7 +118,7 @@ const UserPlanComponent = () => {
                         </Button>
                         </>
                     )
-                
+            
     );
 };
 
