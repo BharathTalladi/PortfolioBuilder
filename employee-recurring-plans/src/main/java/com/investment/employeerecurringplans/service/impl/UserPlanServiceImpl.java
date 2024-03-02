@@ -5,6 +5,7 @@ import com.investment.employeerecurringplans.constants.RecurringPlanConstants;
 import com.investment.employeerecurringplans.entity.EmployerContributionsToUser;
 import com.investment.employeerecurringplans.entity.UserRecurringPlanDetails;
 import com.investment.employeerecurringplans.exceptions.RecurringPlanContributionException;
+import com.investment.employeerecurringplans.exceptions.UserPlanDetailsNotFoundException;
 import com.investment.employeerecurringplans.model.*;
 import com.investment.employeerecurringplans.repository.EmployerContributionsToUserRepository;
 import com.investment.employeerecurringplans.repository.UserRecurringPlanDetailsRepository;
@@ -169,7 +170,7 @@ public class UserPlanServiceImpl implements UserPlanService {
             response.setSalaryAfterContributions(salaryAfterContributions);
             response.setSelfContributionAmount(selfContributionAmount);
         } else {
-            throw new RecurringPlanContributionException("User not Found"+id);
+            throw new UserPlanDetailsNotFoundException("User Plan Details not Found: " +id);
         }
         return response;
     }

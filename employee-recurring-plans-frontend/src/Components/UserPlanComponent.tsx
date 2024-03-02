@@ -18,7 +18,6 @@ interface UserData {
 const UserPlanComponent = () => {
     const { id } = useParams<{ id?: string }>();
     const [userData, setUserData] = useState<UserData | null>(null);
-    const [loading, setLoading] = useState(true);
     const navigate=useNavigate()
 
     useEffect(() => {
@@ -27,15 +26,13 @@ const UserPlanComponent = () => {
                 if (id) {
                     const response = await getUserPlanById(id);
                     console.log(response);
-                    if(response == null){
+                    if(response?.data?.errorMessage){
                         navigate('/createRecurringPlanByUser');
                     }
                     setUserData(response.data);
                 }
             } catch (error) {
                 console.error('Error fetching user plan:', error);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -46,7 +43,6 @@ const UserPlanComponent = () => {
 
     return (
         <>
-            {!loading && (
                 <TableContainer component={Paper}>
                     {userData !== null ? (
                         <>
@@ -119,7 +115,7 @@ const UserPlanComponent = () => {
                         </Button>
                     )}
                 </TableContainer>
-            )}
+            
         </>
     );
 };
