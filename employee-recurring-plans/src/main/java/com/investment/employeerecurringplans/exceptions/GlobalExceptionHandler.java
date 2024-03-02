@@ -44,4 +44,5 @@ public class GlobalExceptionHandler {
                         LocalDateTime.now());
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

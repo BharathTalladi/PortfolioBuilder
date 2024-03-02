@@ -26,10 +26,14 @@ const UserPlanComponent = () => {
                 if (id) {
                     const response = await getUserPlanById(id);
                     console.log(response);
+<<<<<<< HEAD
                     if(response?.data?.errorMessage){
                         navigate('/createRecurringPlanByUser');
                     }
                     setUserData(response.data);
+=======
+                    response?.data?.errorMeesage? navigate('/createRecurringPlanByUser') : setUserData(response.data);
+>>>>>>> 7c9bd91ce127746823e69587423b6eef5ac872c5
                 }
             } catch (error) {
                 console.error('Error fetching user plan:', error);
@@ -41,12 +45,14 @@ const UserPlanComponent = () => {
         }
     }, [id,navigate]);
 
+<<<<<<< HEAD
     return (
         <>
+=======
+    return ( userData?.age ? (
+>>>>>>> 7c9bd91ce127746823e69587423b6eef5ac872c5
                 <TableContainer component={Paper}>
-                    {userData !== null ? (
-                        <>
-                            <Table>
+                           <Table>
                                 <TableHead sx={{ marginTop:"10px" }} >
                                     <TableRow>
                                         <TableCell colSpan={4}>
@@ -108,15 +114,23 @@ const UserPlanComponent = () => {
                                     <TableCell>{userData.totalContributionAmount.total_contribution_amount_ROTHIRA}</TableCell>
                                 </TableRow>
                             </Table>
-                        </>
+                    </TableContainer>
                     ) : (
+                        <>
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         <Button sx={{ marginLeft: "10px", backgroundColor: "#FFF" }} variant="contained">
                             <NavLink to="/createUserPlan">Create User Plan</NavLink>
                         </Button>
+<<<<<<< HEAD
                     )}
                 </TableContainer>
             
         </>
+=======
+                        </>
+                    )
+                
+>>>>>>> 7c9bd91ce127746823e69587423b6eef5ac872c5
     );
 };
 
