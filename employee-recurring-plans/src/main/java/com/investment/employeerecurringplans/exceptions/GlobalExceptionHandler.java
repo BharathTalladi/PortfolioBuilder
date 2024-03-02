@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(RecurringPlanContributionException.class)
-    public ResponseEntity<?> handleHSAContributionException(RecurringPlanContributionException exception, WebRequest request){
+    public ResponseEntity<?> handleRecurringPlanContributionException(RecurringPlanContributionException exception, WebRequest request){
         ErrorResponse errorDetails =
                 new ErrorResponse(
                         request.getDescription(false),
@@ -21,6 +21,18 @@ public class GlobalExceptionHandler {
                         exception.getMessage(),
                         LocalDateTime.now());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserPlanDetailsNotFoundException.class)
+    public ResponseEntity<?> handleUserPlanDetailsNotFoundException(UserPlanDetailsNotFoundException exception, WebRequest request){
+        ErrorResponse errorDetails =
+                new ErrorResponse(
+                        request.getDescription(false),
+                        HttpStatus.OK,
+                        exception.getMessage(),
+                        LocalDateTime.now());
+        return new ResponseEntity<>(errorDetails, HttpStatus.OK
+        );
     }
 
     // handling global exception
@@ -33,12 +45,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(UserDetailsNotFoundException.class)
-    public ResponseEntity<?> UserDetailsNotFoundException(Exception exception, WebRequest request){
-        ErrorResponse errorDetails =
-                new ErrorResponse(request.getDescription(false), HttpStatus.OK,
-                        exception.getMessage(),
-                        LocalDateTime.now());
-        return new ResponseEntity<>(errorDetails, HttpStatus.OK);
-    }
 }

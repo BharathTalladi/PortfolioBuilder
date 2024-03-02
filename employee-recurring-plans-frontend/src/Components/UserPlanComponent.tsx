@@ -26,7 +26,14 @@ const UserPlanComponent = () => {
                 if (id) {
                     const response = await getUserPlanById(id);
                     console.log(response);
+<<<<<<< HEAD
+                    if(response?.data?.errorMessage){
+                        navigate('/createRecurringPlanByUser');
+                    }
+                    setUserData(response.data);
+=======
                     response?.data?.errorMeesage? navigate('/createRecurringPlanByUser') : setUserData(response.data);
+>>>>>>> 7c9bd91ce127746823e69587423b6eef5ac872c5
                 }
             } catch (error) {
                 console.error('Error fetching user plan:', error);
@@ -38,7 +45,12 @@ const UserPlanComponent = () => {
         }
     }, [id,navigate]);
 
+<<<<<<< HEAD
+    return (
+        <>
+=======
     return ( userData?.age ? (
+>>>>>>> 7c9bd91ce127746823e69587423b6eef5ac872c5
                 <TableContainer component={Paper}>
                            <Table>
                                 <TableHead sx={{ marginTop:"10px" }} >
@@ -109,9 +121,16 @@ const UserPlanComponent = () => {
                         <Button sx={{ marginLeft: "10px", backgroundColor: "#FFF" }} variant="contained">
                             <NavLink to="/createUserPlan">Create User Plan</NavLink>
                         </Button>
+<<<<<<< HEAD
+                    )}
+                </TableContainer>
+            
+        </>
+=======
                         </>
                     )
                 
+>>>>>>> 7c9bd91ce127746823e69587423b6eef5ac872c5
     );
 };
 

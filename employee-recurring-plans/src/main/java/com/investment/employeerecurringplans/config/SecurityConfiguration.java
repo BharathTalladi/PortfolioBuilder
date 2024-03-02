@@ -44,7 +44,7 @@ public class SecurityConfiguration {
                         request.requestMatchers("/contributions/register","/contributions/login").permitAll()
                                 .requestMatchers("/contributions/createUserPlan",
                                         "contributions/getUserPlanById/**","/contributions/editUserContributions/**").hasAuthority(Role.USER.name())
-                                .requestMatchers("/contributions/createUserPlanByEmployee/",
+                                .requestMatchers("/contributions/createUserPlanByEmployer",
                                                  "/contributions/getAllUsersPlan","/contributions/editEmployerContributions/**").hasAuthority(Role.ADMIN.name())
                                 .anyRequest()
                                 .authenticated()
