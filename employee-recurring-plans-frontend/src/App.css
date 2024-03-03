@@ -37,3 +37,50 @@
 .read-the-docs {
   color: #888;
 }
+
+a:-webkit-any-link {
+  text-decoration: none;
+  color: black;
+}
+
+.css-16g5rpk-MuiGrid-root {
+
+justify-content: center !important;
+
+}
+
+.css-17vbkzs-MuiFormControl-root-MuiTextField-root {
+  border-radius: 12px;
+}
+
+.css-rqglhn-MuiTable-root {
+  margin-top: 2rem;
+border: inset !important;
+  
+}
+
+.TableContainer {
+  margin-top: 2rem;
+  
+}
+
+.css-1ygcj2i-MuiTableCell-root {
+  background: #d4e3ef !important;
+  padding: 0.5rem !important;
+  font-weight: 600 !important;
+}
+
+.css-1ex1afd-MuiTableCell-root .columnHeader{
+  font-weight: 700 !important;
+}
+.css-1ex1afd-MuiTableCell-root {
+  text-align: center !important;
+}
+
+.css-rorn0c-MuiTableContainer-root {
+  display: inline-block !important;
+}
+
+.editbutton{
+  text-align: right !important;
+}

@@ -41,6 +41,7 @@ function App() {
         <Route path="/createUserPlanByEmployer" element={<AuthenticatedRoute><CreateUserRecurringPlanByEmployerComponent/></AuthenticatedRoute>}></Route>
       </Routes>
       <FooterComponent/>
+      
     
     </>
   )

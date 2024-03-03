@@ -38,8 +38,8 @@ return(
              </Avatar>
             <Typography variant="h5">Login</Typography>
             <Box sx={{ mt: 1 }}>
-            <TextField value={id} name='id' label="Employee ID" margin="normal" fullWidth autoFocus onChange={(s)=> setId(s.target.value)}/>
-            <TextField value={password} label="Password" margin="normal" fullWidth autoFocus name='password'  onChange={(s)=> setPassword(s.target.value)}/>
+            <TextField value={id} name='id' label="Employee ID" margin="normal" fullWidth autoFocus onChange={(s)=> setId(s.target.value)} required/>
+            <TextField value={password} label="Password" margin="normal" fullWidth autoFocus name='password'  onChange={(s)=> setPassword(s.target.value)} required/>
             <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={(u)=> userLogin(u)}>Login</Button>
             <Grid container justifyContent={"flex-end"}>
               <Grid item>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getUserPlanById } from '../Service/Service';
 import { NavLink, useParams,useNavigate } from 'react-router-dom';
-import { Table, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { Table, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TableBody } from '@mui/material';
 
 interface ContributionAmounts {
     [key: string]: number;
@@ -38,68 +38,76 @@ const UserPlanComponent = () => {
     }, [id,navigate]);
 
     return ( userData?.age ? (
-                <TableContainer component={Paper}>
+                <TableContainer className='TableContainer'>
                            <Table>
                                 <TableHead sx={{ marginTop:"10px" }} >
                                     <TableRow>
-                                        <TableCell colSpan={4}>
-                                            Self Contribution Amount
+                                        <TableCell colSpan={3}>Self Contributions</TableCell>
+                                    
+                                        <TableCell colSpan={1} className='editbutton'>
                                             <Button sx={{ marginLeft: "10px", backgroundColor: "#FFF" }} variant="contained">
                                                 <NavLink to={`/editUserContributions/${id}`}>Edit Self Contributions</NavLink>
                                             </Button>
                                         </TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    
+                                </TableHead>
+                                <TableBody>
+                                <TableRow className='columnHeader'>
                                         <TableCell>Self 401k Contribution</TableCell>
                                         <TableCell>Self HSA Contribution</TableCell>
                                         <TableCell>Self FSA Contribution</TableCell>
                                         <TableCell>Self ROTH IRA Contribution</TableCell>
                                     </TableRow>
-                                </TableHead>
                                 <TableRow>
                                     <TableCell>{userData.selfContributionAmount.self_contribution_amount_401K}</TableCell>
                                     <TableCell>{userData.selfContributionAmount.self_contribution_amount_HSA}</TableCell>
                                     <TableCell>{userData.selfContributionAmount.self_contribution_amount_FSA}</TableCell>
                                     <TableCell>{userData.selfContributionAmount.self_contribution_amount_ROTHIRA}</TableCell>
                                 </TableRow>
+                                </TableBody>
                             </Table>
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell colSpan={4}>Employer Contribution Amount</TableCell>
+                                        <TableCell colSpan={4}>Employer Contributions</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                </TableHead>
+                                <TableBody>
+                                <TableRow className='columnHeader'>
                                         <TableCell>Employer 401k Contribution</TableCell>
                                         <TableCell>Employer HSA Contribution</TableCell>
                                         <TableCell>Employer FSA Contribution</TableCell>
                                         <TableCell>Employer ROTH IRA Contribution</TableCell>
                                     </TableRow>
-                                </TableHead>
                                 <TableRow>
                                     <TableCell>{userData.employerContributionAmount.employer_contribution_amount_401k}</TableCell>
                                     <TableCell>{userData.employerContributionAmount.employer_contribution_amount_HSA}</TableCell>
                                     <TableCell>{userData.employerContributionAmount.employer_contribution_amount_FSA}</TableCell>
                                     <TableCell>{userData.employerContributionAmount.employer_contribution_amount_ROTHIRA}</TableCell>
                                 </TableRow>
+                                </TableBody>
                             </Table>
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell colSpan={4}>Total Contributions Amount</TableCell>
+                                        <TableCell colSpan={4}>Total Contributions</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                </TableHead>
+                                <TableBody>
+                                <TableRow className='columnHeader'>
                                         <TableCell>Total 401k Contribution</TableCell>
                                         <TableCell>Total HSA Contribution</TableCell>
                                         <TableCell>Total FSA Contribution</TableCell>
                                         <TableCell>Total ROTH IRA Contribution</TableCell>
                                     </TableRow>
-                                </TableHead>
                                 <TableRow>
                                     <TableCell>{userData.totalContributionAmount.total_contribution_amount_401k}</TableCell>
                                     <TableCell>{userData.totalContributionAmount.total_contribution_amount_HSA}</TableCell>
                                     <TableCell>{userData.totalContributionAmount.total_contribution_amount_FSA}</TableCell>
                                     <TableCell>{userData.totalContributionAmount.total_contribution_amount_ROTHIRA}</TableCell>
                                 </TableRow>
+                                </TableBody>
                             </Table>
                     </TableContainer>
                     ) : (
