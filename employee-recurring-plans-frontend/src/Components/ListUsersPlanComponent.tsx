@@ -47,7 +47,6 @@ const ListUsersPlanComponent = () => {
         setUserPlans(response.data);
       } catch (error) {
         console.error("Error fetching user plans:", error);
-        // Handle error gracefully, e.g., display an error message to the user
       }
     };
 
@@ -129,15 +128,9 @@ const ListUsersPlanComponent = () => {
                       2
                     )}
                   </li>
+
                   <Button>
-                    <NavLink
-                      to={{
-                        pathname: `/editEmployerContributions/${userId}`, // Adjust the path if needed
-                        state: { userPlan: userPlan }, // Pass the userPlan as part of the state
-                      }}
-                    >
-                      Edit Employer Contributions
-                    </NavLink>
+                        Edit Employer Contributions
                   </Button>
                 </ul>
               </TableCell>

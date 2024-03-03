@@ -25,8 +25,7 @@ const UserPlanComponent = () => {
             try {
                 if (id) {
                     const response = await getUserPlanById(id);
-                    console.log(response);
-                    response?.data?.errorMeesage? navigate('/createRecurringPlanByUser') : setUserData(response.data);
+                    response?.data?.errorMeesage? navigate('/createUserPlan') : setUserData(response.data);
                 }
             } catch (error) {
                 console.error('Error fetching user plan:', error);
@@ -37,6 +36,7 @@ const UserPlanComponent = () => {
             fetchData();
         }
     }, [id,navigate]);
+
     return ( userData?.age ? (
                 <TableContainer component={Paper}>
                            <Table>
@@ -110,7 +110,7 @@ const UserPlanComponent = () => {
                         </Button>
                         </>
                     )
-            
+                
     );
 };
 
