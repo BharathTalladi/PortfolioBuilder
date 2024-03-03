@@ -31,7 +31,6 @@ export const loginUser = (userLogin : login) => {
 };
 export const logoutUser=()=>{
     localStorage.clear();
-    sessionStorage.clear();
 }
 export const isAdminUser = ()=>{
     let role=localStorage.getItem("role"); 
@@ -72,11 +71,30 @@ const authConfig = {
         'Authorization': `${getToken()}`
     }
 };
-export const createUserPlan=()=>{
-    return axios.post(`${BASE_API_URL}/createUserPlan`,authConfig)
+
+interface CreatePlanByUser{
+    id:string,
+    dob: Date | null,
+    self_contribution_limit_401K:number,
+    self_contribution_limit_HSA:number
+    self_contribution_limit_FSA:number
+    self_contribution_limit_ROTHIRA: number 
 }
-export const createUserPlanByEmployer=()=>{
-    return axios.post(`${BASE_API_URL}/createUserPlanByEmployer`,authConfig)
+
+export const createUserPlan=(createUserPlanByData: CreatePlanByUser)=>{
+    return axios.post(`${BASE_API_URL}/createUserPlan`,createUserPlanByData,authConfig)
+}
+
+interface CreateUserPlanByEmployer{
+    id:string,
+    employer_contribution_limit_401k:number,
+    employer_contribution_limit_HSA:number
+    employer_contribution_limit_FSA:number
+    employer_contribution_limit_ROTHIRA: number
+}
+
+export const createUserPlanByEmployer=(createUserPlanByEmployerData:CreateUserPlanByEmployer)=>{
+    return axios.post(`${BASE_API_URL}/createUserPlanByEmployer`,createUserPlanByEmployerData,authConfig)
 }
 export const getAllUsersPlan = () =>{
     return axios.get(`${BASE_API_URL}/getAllUsersPlan`,authConfig);

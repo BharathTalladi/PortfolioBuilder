@@ -10,8 +10,8 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
 import { getAllUsersPlan } from "../Service/Service";
+import { NavLink } from "react-router-dom";
 
 interface UserPlan {
   id: string;
@@ -76,92 +76,49 @@ const ListUsersPlanComponent = () => {
               </TableCell>
               <TableCell>
                 <ul>
-                  <li>
-                    401(k): $
-                    {userPlan.selfContributionAmount.self_contribution_amount_401K.toFixed(
-                      2
-                    )}
-                  </li>
-                  <li>
-                    HSA: $
-                    {userPlan.selfContributionAmount.self_contribution_amount_HSA.toFixed(
-                      2
-                    )}
-                  </li>
-                  <li>
-                    FSA: $
-                    {userPlan.selfContributionAmount.self_contribution_amount_FSA.toFixed(
-                      2
-                    )}
-                  </li>
-                  <li>
-                    ROTHIRA: $
-                    {userPlan.selfContributionAmount.self_contribution_amount_ROTHIRA.toFixed(
-                      2
-                    )}
-                  </li>
+                  <li>401(k): $ {userPlan.selfContributionAmount.self_contribution_amount_401K}</li>
+                  <li>HSA: ${userPlan.selfContributionAmount.self_contribution_amount_HSA}</li>
+                  <li>FSA: ${userPlan.selfContributionAmount.self_contribution_amount_FSA}</li>
+                  <li>ROTHIRA: ${userPlan.selfContributionAmount.self_contribution_amount_ROTHIRA}</li>
                 </ul>
               </TableCell>
-              <TableCell>
-                <ul>
-                  <li>
-                    401(k): $
-                    {userPlan.employerContributionAmount.employer_contribution_amount_401k.toFixed(
-                      2
-                    )}
-                  </li>
-                  <li>
-                    HSA: $
-                    {userPlan.employerContributionAmount.employer_contribution_amount_HSA.toFixed(
-                      2
-                    )}
-                  </li>
-                  <li>
-                    FSA: $
-                    {userPlan.employerContributionAmount.employer_contribution_amount_FSA.toFixed(
-                      2
-                    )}
-                  </li>
-                  <li>
-                    ROTHIRA: $
-                    {userPlan.employerContributionAmount.employer_contribution_amount_ROTHIRA.toFixed(
-                      2
-                    )}
-                  </li>
 
-                  <Button>
-                        Edit Employer Contributions
-                  </Button>
+              {
+                userPlan?.employerContributionAmount?.employer_contribution_amount_401k ? (
+                    <>
+                    <TableCell>
+                <ul>
+                  <li>401(k): ${userPlan.employerContributionAmount.employer_contribution_amount_401k}</li>
+                  <li>HSA: ${userPlan.employerContributionAmount.employer_contribution_amount_HSA}</li>
+                  <li>FSA: ${userPlan.employerContributionAmount.employer_contribution_amount_FSA}</li>
+                  <li>ROTHIRA: ${userPlan.employerContributionAmount.employer_contribution_amount_ROTHIRA}</li>
+                  <Button  fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>Edit Employer Contributions</Button>
                 </ul>
               </TableCell>
               <TableCell>
                 <ul>
-                  <li>
-                    401(k): $
-                    {userPlan.totalContributionAmount.total_contribution_amount_401k.toFixed(
-                      2
-                    )}
-                  </li>
-                  <li>
-                    HSA: $
-                    {userPlan.totalContributionAmount.total_contribution_amount_HSA.toFixed(
-                      2
-                    )}
-                  </li>
-                  <li>
-                    FSA: $
-                    {userPlan.totalContributionAmount.total_contribution_amount_FSA.toFixed(
-                      2
-                    )}
-                  </li>
-                  <li>
-                    ROTHIRA: $
-                    {userPlan.totalContributionAmount.total_contribution_amount_ROTHIRA.toFixed(
-                      2
-                    )}
-                  </li>
+                  <li>401(k): ${userPlan.totalContributionAmount.total_contribution_amount_401k}</li>
+                  <li>HSA: ${userPlan.totalContributionAmount.total_contribution_amount_HSA}</li>
+                  <li>FSA: ${userPlan.totalContributionAmount.total_contribution_amount_FSA} </li>
+                  <li> ROTHIRA: ${userPlan.totalContributionAmount.total_contribution_amount_ROTHIRA}</li>
                 </ul>
-              </TableCell>
+                </TableCell>
+                    </>
+                ):(
+                  <>
+                  <TableCell>
+                    <Button  fullWidth variant="contained" sx={{ mt: 2, mb: 1 }}>
+                    <NavLink to="/createUserPlanByEmployer">
+                    Add Employer Contributions
+                    </NavLink>
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    After Employer COntributes Total Contributions will be calculated
+                  </TableCell>
+                  </>
+                )
+              }
             </TableRow>
           ))}
         </TableBody>

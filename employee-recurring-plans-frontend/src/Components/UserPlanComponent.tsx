@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getUserPlanById } from '../Service/Service';
 import { NavLink, useParams,useNavigate } from 'react-router-dom';
-import { Table, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TableBody } from '@mui/material';
+import { Table, TableCell, TableContainer, TableHead, TableRow, Button, TableBody } from '@mui/material';
 
 interface ContributionAmounts {
     [key: string]: number;
@@ -37,7 +37,7 @@ const UserPlanComponent = () => {
         }
     }, [id,navigate]);
 
-    return ( userData?.age ? (
+    return ( userData?.selfContributionAmount ? (
                 <TableContainer className='TableContainer'>
                            <Table>
                                 <TableHead sx={{ marginTop:"10px" }} >
@@ -60,14 +60,16 @@ const UserPlanComponent = () => {
                                         <TableCell>Self ROTH IRA Contribution</TableCell>
                                     </TableRow>
                                 <TableRow>
-                                    <TableCell>{userData.selfContributionAmount.self_contribution_amount_401K}</TableCell>
-                                    <TableCell>{userData.selfContributionAmount.self_contribution_amount_HSA}</TableCell>
-                                    <TableCell>{userData.selfContributionAmount.self_contribution_amount_FSA}</TableCell>
-                                    <TableCell>{userData.selfContributionAmount.self_contribution_amount_ROTHIRA}</TableCell>
+                                    <TableCell>${userData.selfContributionAmount.self_contribution_amount_401K}</TableCell>
+                                    <TableCell>${userData.selfContributionAmount.self_contribution_amount_HSA}</TableCell>
+                                    <TableCell>${userData.selfContributionAmount.self_contribution_amount_FSA}</TableCell>
+                                    <TableCell>${userData.selfContributionAmount.self_contribution_amount_ROTHIRA}</TableCell>
                                 </TableRow>
                                 </TableBody>
                             </Table>
-                            <Table>
+
+                            {userData?.employerContributionAmount?.employer_contribution_amount_401k? (
+                                <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell colSpan={4}>Employer Contributions</TableCell>
@@ -81,14 +83,26 @@ const UserPlanComponent = () => {
                                         <TableCell>Employer ROTH IRA Contribution</TableCell>
                                     </TableRow>
                                 <TableRow>
-                                    <TableCell>{userData.employerContributionAmount.employer_contribution_amount_401k}</TableCell>
-                                    <TableCell>{userData.employerContributionAmount.employer_contribution_amount_HSA}</TableCell>
-                                    <TableCell>{userData.employerContributionAmount.employer_contribution_amount_FSA}</TableCell>
-                                    <TableCell>{userData.employerContributionAmount.employer_contribution_amount_ROTHIRA}</TableCell>
+                                    <TableCell>${userData.employerContributionAmount.employer_contribution_amount_401k}</TableCell>
+                                    <TableCell>${userData.employerContributionAmount.employer_contribution_amount_HSA}</TableCell>
+                                    <TableCell>${userData.employerContributionAmount.employer_contribution_amount_FSA}</TableCell>
+                                    <TableCell>${userData.employerContributionAmount.employer_contribution_amount_ROTHIRA}</TableCell>
                                 </TableRow>
                                 </TableBody>
-                            </Table>
-                            <Table>
+                                </Table>
+                            ):(
+                                <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell colSpan={4}>Please contact Employer for Employer Contributions</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                </Table>
+                            )}
+
+
+                            {userData?.totalContributionAmount?.total_contribution_amount_401k? (
+                                <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell colSpan={4}>Total Contributions</TableCell>
@@ -102,13 +116,27 @@ const UserPlanComponent = () => {
                                         <TableCell>Total ROTH IRA Contribution</TableCell>
                                     </TableRow>
                                 <TableRow>
-                                    <TableCell>{userData.totalContributionAmount.total_contribution_amount_401k}</TableCell>
-                                    <TableCell>{userData.totalContributionAmount.total_contribution_amount_HSA}</TableCell>
-                                    <TableCell>{userData.totalContributionAmount.total_contribution_amount_FSA}</TableCell>
-                                    <TableCell>{userData.totalContributionAmount.total_contribution_amount_ROTHIRA}</TableCell>
+                                    <TableCell>${userData.totalContributionAmount.total_contribution_amount_401k}</TableCell>
+                                    <TableCell>${userData.totalContributionAmount.total_contribution_amount_HSA}</TableCell>
+                                    <TableCell>${userData.totalContributionAmount.total_contribution_amount_FSA}</TableCell>
+                                    <TableCell>${userData.totalContributionAmount.total_contribution_amount_ROTHIRA}</TableCell>
                                 </TableRow>
                                 </TableBody>
                             </Table>
+
+                            ):(
+                                <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell colSpan={4}>After Employer contributes, total Contribution Amount will be calculated. Please reach out to Employer</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                </Table>
+                            )}
+
+                            
+
+
                     </TableContainer>
                     ) : (
                         <>
