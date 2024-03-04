@@ -31,11 +31,11 @@ const EditUserContributionsComponent=()=>{
                     <TextField value={self_contribution_amount_401K} name='self_contribution_amount_401K' label="Edit Self 401k Contribution" 
                       sx={{ m: 1 }} id="self_contribution_amount_401K"margin="normal" fullWidth autoFocus onChange={(s)=> setSelf_Contribution_Amount_401K(s.target.value)}/>
                     <TextField value={self_contribution_amount_HSA} name='self_contribution_amount_HSA' label="Edit Self HSA Contribution" 
-                      sx={{ m: 1 }} id="self_contribution_amount_401K"  margin="normal" fullWidth autoFocus onChange={(s)=> setSelf_Contribution_Amount_HSA(s.target.value)}/>
+                      sx={{ m: 1 }} id="self_contribution_amount_HSA"  margin="normal" fullWidth autoFocus onChange={(s)=> setSelf_Contribution_Amount_HSA(s.target.value)}/>
                     <TextField value={self_contribution_amount_FSA} name='self_contribution_amount_FSA' label="Edit Self FSA Contribution" 
-                      sx={{ m: 1}} id="self_contribution_amount_401K" margin="normal" fullWidth autoFocus onChange={(s)=> setSelf_Contribution_Amount_FSA(s.target.value)}/>
+                      sx={{ m: 1}} id="self_contribution_amount_FSA" margin="normal" fullWidth autoFocus onChange={(s)=> setSelf_Contribution_Amount_FSA(s.target.value)}/>
                     <TextField value={self_contribution_amount_ROTHIRA} name='self_contribution_amount_ROTHIRA' label="Edit Self ROTH IRA Contribution" 
-                      sx={{ m: 1 }} id="self_contribution_amount_401K" margin="normal" fullWidth autoFocus onChange={(s)=> setSelf_Contribution_Amount_ROTHIRA(s.target.value)}/> 
+                      sx={{ m: 1 }} id="self_contribution_amount_ROTHIRA" margin="normal" fullWidth autoFocus onChange={(s)=> setSelf_Contribution_Amount_ROTHIRA(s.target.value)}/> 
                     <Button sx={{ mt:0.8,marginLeft: "auto",backgroundColor: "#FFF" }} variant="contained" onClick={(u)=> editUserContributions(u)}><NavLink to={`/getUserPlanById/${id}`}>Save</NavLink></Button>
                     <Button sx={{ mt:0.8, marginLeft: "12px",backgroundColor: "#FFF" }} variant="contained"><NavLink to={`/getUserPlanById/${id}`}>Cancel</NavLink></Button>
             </Box>

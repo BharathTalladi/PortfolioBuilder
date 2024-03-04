@@ -10,6 +10,7 @@ import com.investment.employeerecurringplans.repository.UserRepository;
 import com.investment.employeerecurringplans.service.JWTService;
 import com.investment.employeerecurringplans.service.UserLoginRegisterService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -43,33 +44,24 @@ public class UserLoginRegisterServiceImpl implements UserLoginRegisterService {
 
 
     public LoginResponse authenticate(LoginRequest request) {
-        if (request.getId() == null) {
-            return new LoginResponse("User login failed", "Id must be present","Role cannot be provided");
+        if (request.getId() == null || request.getPassword() ==null) {
+            return new LoginResponse("User login failed", "Login Credentials must be present","Role cannot be provided");
         }
-        /*try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmailId(),
-                            request.getPassword()
-                    )
-            );
-        } catch (AuthenticationException e) {
-            // Authentication failed, return an error response
-            return new LoginResponse("User login failed", "Invalid credentials");
-        }*/
         Optional<User> optionalUser = userRepository.findById(request.getId());
         if (optionalUser.isEmpty()) {
             return new LoginResponse("User login failed","Cannot provide token","Cannot provide role");
         }
         User user = optionalUser.get();
+        String userPassword = user.getPassword();
+        if (!passwordEncoder.matches(request.getPassword(), userPassword)) {
+            return new LoginResponse("User login failed", "Incorrect password", "Role cannot be provided");
+        }
         String jwtToken = jwtService.generateToken(user.getId());
-        //String refreshJwtToken=jwtService.generateRefreshToken(new HashMap<>(),user);
         LoginResponse loginResponse=new LoginResponse();
         loginResponse.setMessage("User login successful");
         loginResponse.setToken(jwtToken);
         loginResponse.setRole(user.getRoles().name());
-        //loginResponse.setRefreshToken(refreshJwtToken);
         return loginResponse;
-
     }
+
 }

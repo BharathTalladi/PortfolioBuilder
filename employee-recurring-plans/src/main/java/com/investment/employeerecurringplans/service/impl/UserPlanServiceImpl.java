@@ -144,6 +144,7 @@ public class UserPlanServiceImpl implements UserPlanService {
         // Check if both entities exist
         if (userRecurringPlanDetailsOptional.isPresent()) {
             UserRecurringPlanDetails userRecurringPlanDetails = userRecurringPlanDetailsOptional.get();
+            response.setSalary(userRecurringPlanDetails.getSalary());
             response.setId(userRecurringPlanDetails.getUserId());
             response.setAge(calculateAge(userRecurringPlanDetails.getDob()));
             // Calculate self contribution amount
@@ -182,6 +183,7 @@ public class UserPlanServiceImpl implements UserPlanService {
         for(UserRecurringPlanDetails userDetails:userDetailsList){
             RecurringPlanResponse response = new RecurringPlanResponse();
             response.setId(userDetails.getUserId());
+            response.setSalary(userDetails.getSalary());
             response.setAge(calculateAge(userDetails.getDob()));
             response.setSelfContributionAmount(getSelfContributionAmount(userDetails));
             TotalContributionAmount totalContributionAmount = new TotalContributionAmount();
