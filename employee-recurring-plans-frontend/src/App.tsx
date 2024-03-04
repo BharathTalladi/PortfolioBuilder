@@ -37,7 +37,7 @@ function App() {
         <Route path="/editUserContributions/:id" element={<AuthenticatedRoute><EditUserContributionsComponent/></AuthenticatedRoute>}></Route>
         <Route path="/editEmployerContributions/:id" element={<AuthenticatedRoute><EditEmployerContributionsComponent/></AuthenticatedRoute>}></Route>
         <Route path="/createUserPlan" element={<AuthenticatedRoute><CreateRecurringPlanByUserComponent userId={userId} /></AuthenticatedRoute>}></Route>
-        <Route path="/createUserPlanByEmployer" element={<AuthenticatedRoute><CreateUserRecurringPlanByEmployerComponent userId={userId}/></AuthenticatedRoute>}></Route>
+        <Route path="/createUserPlanByEmployer" element={<AuthenticatedRoute><CreateUserRecurringPlanByEmployerComponent/></AuthenticatedRoute>}></Route>
       </Routes>
       <FooterComponent/>
 

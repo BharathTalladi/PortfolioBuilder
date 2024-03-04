@@ -15,7 +15,6 @@ import { NavLink } from "react-router-dom";
 
 interface UserPlan {
   id: string;
-  age: number;
   salaryAfterContributions: number;
   selfContributionAmount: {
     self_contribution_amount_401K: number;
@@ -43,7 +42,7 @@ const ListUsersPlanComponent = () => {
   useEffect(() => {
     const fetchUserPlans = async () => {
       try {
-        const response = await getAllUsersPlan(); // Replace with your API call
+        const response = await getAllUsersPlan();
         setUserPlans(response.data);
       } catch (error) {
         console.error("Error fetching user plans:", error);
@@ -72,7 +71,7 @@ const ListUsersPlanComponent = () => {
             <TableRow key={userPlan.id}>
               <TableCell>{userPlan.id}</TableCell>
               <TableCell>
-                {userPlan.salaryAfterContributions.toFixed(2)}
+                $ {userPlan.salaryAfterContributions}
               </TableCell>
               <TableCell>
                 <ul>

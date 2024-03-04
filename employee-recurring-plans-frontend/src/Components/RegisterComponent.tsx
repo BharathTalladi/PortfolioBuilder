@@ -8,10 +8,28 @@ const RegisterComponent = ()=>{
     const [name, setName] = useState('')
     const [emailId, setEmailId] = useState('')
     const [password,setPassword] = useState('')
+    const [nameError, setNameError] = useState(false);
+    const [emailIdError, setEmailIdError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
     const navigate = useNavigate();
 
     const userRegister = (u: React.MouseEvent<HTMLButtonElement>) =>{
         u.preventDefault();
+        if(!name){
+            setNameError(true);
+            return
+        }
+        if(!emailId){
+            setEmailIdError(true);
+            return;
+        }
+        if(!password){
+            setPasswordError(true);
+            return;
+        }
+        setNameError(false);
+        setEmailIdError(false);
+        setPasswordError(false);
         const user={name,emailId,password};
         console.log(user);
         registerUser(user).then((response)=> {
@@ -34,13 +52,13 @@ const RegisterComponent = ()=>{
             <Box sx={{ mt: 3 }}>
             <Grid container spacing={2}>
             <Grid item xs={12}>
-                <TextField value={name} name='name' label="Name" id="name" fullWidth autoFocus onChange={(s)=> setName(s.target.value)}/>
+                <TextField value={name} name='name' label="Name" id="name" fullWidth autoFocus onChange={(s)=> setName(s.target.value)} required error={nameError}/>
             </Grid>
             <Grid item xs={12}>
-                <TextField value={emailId} name='emailId' label="Email Address" id="emailId" fullWidth autoFocus onChange={(s)=> setEmailId(s.target.value)}/>
+                <TextField value={emailId} name='emailId' label="Email Address" id="emailId" fullWidth autoFocus onChange={(s)=> setEmailId(s.target.value)} required error={emailIdError}/>
             </Grid>
             <Grid item xs={12}>
-                <TextField value={password} name='password' label="Password" id="password" fullWidth autoFocus onChange={(s)=> setPassword(s.target.value)}/>
+                <TextField value={password} name='password' label="Password" id="password" fullWidth autoFocus onChange={(s)=> setPassword(s.target.value)} required error={passwordError}/>
             </Grid>
             </Grid>
             <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={(u)=> userRegister(u)}>Register</Button>

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RecurringPlanUserResponse {
     private int age;
+    private double salary;
     private double salaryAfterContributions;
     private SelfContributionAmount selfContributionAmount;
 }

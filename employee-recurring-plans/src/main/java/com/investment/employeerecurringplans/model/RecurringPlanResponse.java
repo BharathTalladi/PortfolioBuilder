@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class RecurringPlanResponse {
     private String id;
     private int age;
+    private double salary;
     private double salaryAfterContributions;
     private SelfContributionAmount selfContributionAmount;
     private EmployerContributionAmount employerContributionAmount;
