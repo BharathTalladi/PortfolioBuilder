@@ -190,6 +190,7 @@ const EditEmployerContributionsComponent = () => {
           sx={{ mt: 0.8, marginLeft: "12px", backgroundColor: "#FFF" }}
           variant="contained"
         >
+          
           <NavLink to={`/getAllUsersPlan`}>Cancel</NavLink>
         </Button>
       </Box>

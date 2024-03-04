@@ -107,7 +107,7 @@ const ListUsersPlanComponent = () => {
                   <>
                   <TableCell>
                     <Button  fullWidth variant="contained" sx={{ mt: 2, mb: 1 }}>
-                    <NavLink to="/createUserPlanByEmployer">
+                    <NavLink to={`/createUserPlanByEmployer?id=${userPlan.id}`} >
                     Add Employer Contributions
                     </NavLink>
                     </Button>

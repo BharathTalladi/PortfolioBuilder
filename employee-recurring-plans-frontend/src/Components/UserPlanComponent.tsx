@@ -9,6 +9,7 @@ interface ContributionAmounts {
 
 interface UserData {
     age: number;
+    salary:number;
     salaryAfterContributions: number;
     selfContributionAmount: ContributionAmounts;
     employerContributionAmount: ContributionAmounts;
@@ -19,7 +20,6 @@ const UserPlanComponent = () => {
     const { id } = useParams<{ id?: string }>();
     const [userData, setUserData] = useState<UserData | null>(null);
     const navigate=useNavigate()
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -31,7 +31,6 @@ const UserPlanComponent = () => {
                 console.error('Error fetching user plan:', error);
             }
         };
-
         if (id) {
             fetchData();
         }
@@ -43,15 +42,35 @@ const UserPlanComponent = () => {
                                 <TableHead sx={{ marginTop:"10px" }} >
                                     <TableRow>
                                         <TableCell colSpan={3}>Self Contributions</TableCell>
-                                    
                                         <TableCell colSpan={1} className='editbutton'>
-                                            <Button sx={{ marginLeft: "10px", backgroundColor: "#FFF" }} variant="contained">
-                                                <NavLink to={`/editUserContributions/${id}`}>Edit Self Contributions</NavLink>
-                                            </Button>
+                                        <Button fullWidth variant="contained" sx={{ mt: 2, mb: 1 }} onClick={() => navigate(`/editUserContributions/${id}`, {
+                                            state: {
+                                                userPlanData: {
+                                                    salary: userData.salary,
+                                                    self_contribution_limit_401K: userData.selfContributionAmount.self_contribution_amount_401K,
+                                                    self_contribution_limit_HSA: userData.selfContributionAmount.self_contribution_amount_HSA,
+                                                    self_contribution_limit_FSA: userData.selfContributionAmount.self_contribution_amount_FSA,
+                                                    self_contribution_limit_ROTHIRA: userData.selfContributionAmount.self_contribution_amount_ROTHIRA,
+                                                },
+                                            },
+                                        })}>
+                                            Edit User Contributions
+                                        </Button>
                                         </TableCell>
                                     </TableRow>
-                                    
                                 </TableHead>
+                                <TableBody>
+                                    <TableRow className='columnHeader'>
+                                        <TableCell>Age</TableCell>
+                                        <TableCell>Salary</TableCell>
+                                        <TableCell>Gross Salary After Contributions</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>{userData.age}years</TableCell>
+                                        <TableCell>${userData.salary}</TableCell>
+                                        <TableCell>${userData.salaryAfterContributions}</TableCell>
+                                    </TableRow>
+                                </TableBody>
                                 <TableBody>
                                 <TableRow className='columnHeader'>
                                         <TableCell>Self 401k Contribution</TableCell>
@@ -133,10 +152,6 @@ const UserPlanComponent = () => {
                                 </TableHead>
                                 </Table>
                             )}
-
-                            
-
-
                     </TableContainer>
                     ) : (
                         <>

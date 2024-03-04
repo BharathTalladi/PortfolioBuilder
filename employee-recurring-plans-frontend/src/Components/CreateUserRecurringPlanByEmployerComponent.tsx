@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Container,Box, Typography,Button,TextField,Avatar,Grid,FormHelperText} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { NavLink } from "react-router-dom";
-import { createUserPlanByEmployer } from "../Service/Service";
+import { createUserPlanByEmployer  } from "../Service/Service";
 
 interface CreateUserPlanByEmployer{
     id:string,
@@ -12,16 +12,15 @@ interface CreateUserPlanByEmployer{
     employer_contribution_limit_ROTHIRA: number
 }
 
-
-
-
 const CreateUserRecurringPlanByEmployerComponent = ()=>{
-    const[id]=useState();
+    const [id]=useState();
     const[salary]=useState();
     const[employer_contribution_limit_401k,setEmployer_Contribution_Limit_401k]=useState<number>(0.0);
     const[employer_contribution_limit_HSA,setEmployer_Contribution_Limit_HSA]=useState<number>(0.0);
     const[employer_contribution_limit_FSA,setEmployer_Contribution_Limit_FSA]=useState<number>(0.0);
     const[employer_contribution_limit_ROTHIRA,setEmployer_Contribution_Limit_ROTHIRA]=useState<number>(0.0);
+  
+
 
     const createUserRecurringPlanByEmployer = async () => {
         try {
@@ -38,8 +37,10 @@ const CreateUserRecurringPlanByEmployerComponent = ()=>{
         } catch (error) {
           console.error(error);
         }
-      };
+    };
 
+    
+    
 
     return(
         <Container maxWidth="xs">
@@ -47,7 +48,7 @@ const CreateUserRecurringPlanByEmployerComponent = ()=>{
         <Avatar sx={{ m: 1, bgcolor: "primary.light" }}>
         <EditIcon />
         </Avatar>
-        <Typography variant="h5">Update Self Contribution Details</Typography>
+        <Typography variant="h5">Add Employer Contribution Details</Typography>
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <TextField value={id} name='id' label="Employee ID" sx={{ m: 1 , fontWeight:'bold'}} id="id"  margin="normal" fullWidth autoFocus disabled/>
@@ -62,7 +63,7 @@ const CreateUserRecurringPlanByEmployerComponent = ()=>{
             </Grid>
             <Grid item xs={4}>
             <TextField name='self_contribution_amount_401K' label="Employee 401k Contribution" 
-            sx={{ m: 1 }} id="employer_contribution_amount_401K"margin="normal" fullWidth autoFocus/>
+            sx={{ m: 1 }} id="self_contribution_amount_401K"margin="normal" fullWidth autoFocus/>
             </Grid>
             <Grid item xs={4}>
             <TextField value={employer_contribution_limit_HSA} name='employer_contribution_amount_HSA' label="Add Employer HSA Contribution" 
@@ -72,8 +73,8 @@ const CreateUserRecurringPlanByEmployerComponent = ()=>{
             <FormHelperText  sx={{ m: 1, fontWeight: 'bold',color: "secondary.main", width: "100%" }} >Employer can only contribute maximum of $2100 to employee HSA Account</FormHelperText>
             </Grid>
             <Grid item xs={4}>
-            <TextField name='self_contribution_amount_401K' label="Employee 401k Contribution" 
-            sx={{ m: 1 }} id="employer_contribution_amount_401K"margin="normal" fullWidth autoFocus/>
+            <TextField name='self_contribution_amount_HSA' label="Employee HSA Contribution" 
+            sx={{ m: 1 }} id="self_contribution_amount_HSA"margin="normal" fullWidth autoFocus/>
             </Grid>
             <Grid item xs={4}>
             <TextField value={employer_contribution_limit_FSA} name='employer_contribution_amount_FSA' label="Add Employer FSA Contribution" 
@@ -83,19 +84,19 @@ const CreateUserRecurringPlanByEmployerComponent = ()=>{
             <FormHelperText  sx={{ m: 1, fontWeight: 'bold',color: "secondary.main", width: "100%" }} >Employer can only contribute maximum of $3200 to employee FSA Account</FormHelperText>
             </Grid>
             <Grid item xs={4}>
-            <TextField name='self_contribution_amount_401K' label="Employee 401k Contribution" 
-            sx={{ m: 1 }} id="employer_contribution_amount_401K"margin="normal" fullWidth autoFocus/>
+            <TextField name='self_contribution_amount_FSA' label="Employee FSA Contribution" 
+            sx={{ m: 1 }} id="self_contribution_amount_FSA"margin="normal" fullWidth autoFocus/>
             </Grid>
             <Grid item xs={4}>
             <TextField value={employer_contribution_limit_ROTHIRA} name='employer_contribution_amount_ROTHIRA' label="Add Employer ROTH IRA Contribution" 
-                      sx={{ m: 1 }} id="employer_contribution_amount_401K" margin="normal" fullWidth autoFocus onChange={(s)=> setEmployer_Contribution_Limit_ROTHIRA(Number(s.target.value))}/> 
+                      sx={{ m: 1 }} id="employer_contribution_amount_ROTHIRA" margin="normal" fullWidth autoFocus onChange={(s)=> setEmployer_Contribution_Limit_ROTHIRA(Number(s.target.value))}/> 
             </Grid>
             <Grid item xs={4}>
             <FormHelperText  sx={{ m: 1, fontWeight: 'bold',color: "secondary.main", width: "100%" }} >Employee can only contribute $ to employee ROTH IRA Account</FormHelperText>
             </Grid>
             <Grid item xs={4}>
-            <TextField name='self_contribution_amount_401K' label="Employee 401k Contribution" 
-            sx={{ m: 1 }} id="employer_contribution_amount_401K"margin="normal" fullWidth autoFocus/>
+            <TextField name='self_contribution_amount_ROTHIRA' label="Employee ROTHIRA Contribution" 
+            sx={{ m: 1 }} id="self_contribution_amount_ROTHIRA"margin="normal" fullWidth autoFocus/>
             </Grid>
             <Grid item xs={12}>
                 <Button sx={{ mt:0.8,marginLeft: "auto",backgroundColor: "#FFF" }} variant="contained" onClick={createUserRecurringPlanByEmployer}><NavLink to={`/getUserPlanById/${id}`}>Save</NavLink></Button>

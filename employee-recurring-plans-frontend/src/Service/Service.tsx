@@ -17,6 +17,7 @@ const config = {
     }
 };
 
+
 export const registerUser = (userData : User) =>{
     return axios.post(`${BASE_API_URL}/register`, userData, config);
 }
@@ -75,6 +76,7 @@ const authConfig = {
 interface CreatePlanByUser{
     id:string,
     dob: Date | null,
+    salary:number,
     self_contribution_limit_401K:number,
     self_contribution_limit_HSA:number
     self_contribution_limit_FSA:number
@@ -102,10 +104,27 @@ export const getAllUsersPlan = () =>{
 export const getUserPlanById= (id: string)=>{
     return axios.get(`${BASE_API_URL}/getUserPlanById/${id}`,authConfig);
 }
-export const editEmployerContributions= (id: string)=>{
-    return axios.get(`${BASE_API_URL}/editEmployerContributions/${id}`,authConfig);
+
+interface EditRecurringPlanByUser{
+    salary:number,
+    self_contribution_limit_401K:number,
+    self_contribution_limit_HSA:number
+    self_contribution_limit_FSA:number
+    self_contribution_limit_ROTHIRA: number 
 }
-export const editUserContributions= (id: string)=>{
-    return axios.get(`${BASE_API_URL}/editUserContributions/${id}`,authConfig);
+
+
+export const editEmployerContributions= (id: string,editRecurringByUserData:EditRecurringPlanByUser)=>{
+    return axios.patch(`${BASE_API_URL}/editEmployerContributions/${id}`,editRecurringByUserData,authConfig);
+}
+
+interface EditUserRecurringPlanByEmployer{
+    employer_contribution_limit_401k:number,
+    employer_contribution_limit_HSA:number
+    employer_contribution_limit_FSA:number
+    employer_contribution_limit_ROTHIRA: number
+}
+export const editUserContributions= (id: string,editUserRecurringPlanByEmployerData:EditUserRecurringPlanByEmployer)=>{
+    return axios.patch(`${BASE_API_URL}/editUserContributions/${id}`,editUserRecurringPlanByEmployerData,authConfig);
     
 }
