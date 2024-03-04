@@ -1,17 +1,49 @@
-import { useState } from "react";
-import { useParams,NavLink } from "react-router-dom";
-import { editUserContributions } from "../Service/Service";
+import { useState,useEffect } from "react";
+import { useParams,NavLink,useNavigate } from "react-router-dom";
+import { getUserPlanById } from '../Service/Service';
 import { Container,Box, Typography,Button,TextField,Avatar} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 
+interface ContributionAmounts {
+  [key: string]: number;
+}
+
+interface UserData {
+  age: number;
+  salaryAfterContributions: number;
+  selfContributionAmount: ContributionAmounts;
+  employerContributionAmount: ContributionAmounts;
+  totalContributionAmount: ContributionAmounts;
+}
+
 const EditUserContributionsComponent=()=>{
 
-    const {id} = useParams<{id?:string}>();
-    const [salary,setSalary]=useState('');
+  const { id } = useParams<{ id?: string }>();
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const navigate=useNavigate()
+
+  const [salary,setSalary]=useState('');
     const [self_contribution_amount_401K,setSelf_Contribution_Amount_401K]=useState('');
     const [self_contribution_amount_HSA,setSelf_Contribution_Amount_HSA]=useState('');
     const [self_contribution_amount_FSA,setSelf_Contribution_Amount_FSA]=useState('');
     const [self_contribution_amount_ROTHIRA,setSelf_Contribution_Amount_ROTHIRA]=useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            if (id) {
+                const response = await getUserPlanById(id);
+                response?.data?.errorMeesage? navigate('/createUserPlan') : setUserData(response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching user plan:', error);
+        }
+    };
+
+    if (id) {
+        fetchData();
+    }
+}, [id,navigate]); 
 
     const editUserContributions = (u: React.MouseEvent<HTMLButtonElement>) =>{
         u.preventDefault();
