@@ -4,6 +4,18 @@ import { editUserContributions } from "../Service/Service";
 import { Container,Box, Typography,Button,TextField,Avatar} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 
+interface ContributionAmounts {
+  [key: string]: number;
+}
+
+interface UserData {
+  age: number;
+  salaryAfterContributions: number;
+  selfContributionAmount: ContributionAmounts;
+  employerContributionAmount: ContributionAmounts;
+  totalContributionAmount: ContributionAmounts;
+}
+
 const EditUserContributionsComponent=()=>{
 
     const {id} = useParams<{id?:string}>();
