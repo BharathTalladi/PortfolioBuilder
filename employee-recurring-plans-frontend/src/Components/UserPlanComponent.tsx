@@ -39,11 +39,30 @@ const UserPlanComponent = () => {
     return ( userData?.selfContributionAmount ? (
                 <TableContainer className='TableContainer'>
                            <Table>
+                           <TableHead>
+                                    <TableRow>
+                                        <TableCell colSpan={3}>Employee Details</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                            <TableBody>
+                                    <TableRow className='columnHeader'>
+                                        <TableCell>Age</TableCell>
+                                        <TableCell>Salary</TableCell>
+                                        <TableCell>Gross Salary After Contributions</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>{userData.age}years</TableCell>
+                                        <TableCell>${userData.salary}</TableCell>
+                                        <TableCell>${userData.salaryAfterContributions}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                                <br/>
+                                <br/>
                                 <TableHead sx={{ marginTop:"10px" }} >
                                     <TableRow>
                                         <TableCell colSpan={3}>Self Contributions</TableCell>
                                         <TableCell colSpan={1} className='editbutton'>
-                                        <Button fullWidth variant="contained" sx={{ mt: 2, mb: 1 }} onClick={() => navigate(`/editUserContributions/${id}`, {
+                                        <Button fullWidth variant="contained" sx={{ mt: 0.5, mb: 0.5 }} onClick={() => navigate(`/editUserContributions/${id}`, {
                                             state: {
                                                 userPlanData: {
                                                     salary: userData.salary,
@@ -59,18 +78,6 @@ const UserPlanComponent = () => {
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
-                                <TableBody>
-                                    <TableRow className='columnHeader'>
-                                        <TableCell>Age</TableCell>
-                                        <TableCell>Salary</TableCell>
-                                        <TableCell>Gross Salary After Contributions</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell>{userData.age}years</TableCell>
-                                        <TableCell>${userData.salary}</TableCell>
-                                        <TableCell>${userData.salaryAfterContributions}</TableCell>
-                                    </TableRow>
-                                </TableBody>
                                 <TableBody>
                                 <TableRow className='columnHeader'>
                                         <TableCell>Self 401k Contribution</TableCell>
