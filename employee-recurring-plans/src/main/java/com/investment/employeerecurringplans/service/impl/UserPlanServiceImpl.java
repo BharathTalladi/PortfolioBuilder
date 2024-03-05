@@ -111,9 +111,8 @@ public class UserPlanServiceImpl implements UserPlanService {
         EmployerContributionAmount employerContributionAmount=new EmployerContributionAmount();
         EmployerContributionsToUser employerContributionsToUser = new EmployerContributionsToUser();
         employerContributionsToUser.setEmployeeId(employerRequest.getId());
-        double userSalary = userRequest.getSalary();
         double user401kContribution = userRequest.getSelf_contribution_limit_401K();
-        double employer401kContribution = userSalary * (employerRequest.getEmployer_contribution_limit_401k() / 100.0);
+        double employer401kContribution = employerRequest.getEmployer_contribution_limit_401k() ;
         if (employer401kContribution != user401kContribution) {
             throw new RecurringPlanContributionException("Employer should match 401k with user 401k Plan");
         }
@@ -298,14 +297,10 @@ public class UserPlanServiceImpl implements UserPlanService {
             RecurringPlanEmployerRequest employerRequest=request.get();
             // Calculate employer's 401k contribution based on user's salary and contribution percentage
             if (employerRequest.getEmployer_contribution_limit_401k() != null) {
-                double userSalary = userRecurringPlanDetails.getSalary();
-                double user401kAmount = userRecurringPlanDetails.getSelf_contribution_limit_401K();
-                double user401kContribution=((user401kAmount/userSalary)*100);
-                // Ensure employer's 401k contribution matches the user's contribution percentage
-                if (employerRequest.getEmployer_contribution_limit_401k() != user401kContribution) {
+                if (!employerRequest.getEmployer_contribution_limit_401k().equals(userRecurringPlanDetails.getSelf_contribution_limit_401K())) {
                     throw new RecurringPlanContributionException("Employer should match employee 401k Plan");
                 }
-                employerContributionsToUser.setEmployer_contribution_limit_401K(user401kAmount);
+                employerContributionsToUser.setEmployer_contribution_limit_401K(employerRequest.getEmployer_contribution_limit_401k() );
             }
             if (employerRequest.getEmployer_contribution_limit_HSA() != null) {
                 double limitHSA = employerRequest.getEmployer_contribution_limit_HSA();
