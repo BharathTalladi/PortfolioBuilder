@@ -36,6 +36,19 @@ interface UserPlan {
   };
 }
 
+interface ContributionAmounts {
+  [key: string]: number;
+}
+
+interface UserData {
+  age: number;
+  salary:number;
+  salaryAfterContributions: number;
+  selfContributionAmount: ContributionAmounts;
+  employerContributionAmount: ContributionAmounts;
+  totalContributionAmount: ContributionAmounts;
+}
+
 const ListUsersPlanComponent = () => {
   const [userPlans, setUserPlans] = useState<UserPlan[]>([]);
   const navigate =useNavigate();
@@ -126,10 +139,8 @@ const ListUsersPlanComponent = () => {
                   <>
                   <TableCell>
                     <Button  fullWidth variant="contained" sx={{ mt: 2, mb: 1 }} >
-                    <NavLink to={`/createUserPlanByEmployer?id=${userPlan.id}`} >
-
+                    <NavLink to={`/createUserPlanByEmployer?id=${userPlan.id}`} />
                     Add Employer Contributions
-                    </NavLink>
                     </Button>
                   </TableCell>
                   <TableCell>

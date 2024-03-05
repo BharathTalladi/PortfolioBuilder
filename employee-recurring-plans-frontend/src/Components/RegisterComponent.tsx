@@ -11,6 +11,7 @@ const RegisterComponent = ()=>{
     const [nameError, setNameError] = useState(false);
     const [emailIdError, setEmailIdError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     const userRegister = (u: React.MouseEvent<HTMLButtonElement>) =>{
@@ -23,6 +24,10 @@ const RegisterComponent = ()=>{
             setEmailIdError(true);
             return;
         }
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/di.test(emailId)) {
+            setErrorMessage("Please enter valid email");
+            return;
+          }
         if(!password){
             setPasswordError(true);
             return;
@@ -61,6 +66,11 @@ const RegisterComponent = ()=>{
                 <TextField value={password} name='password' label="Password" id="password" fullWidth autoFocus onChange={(s)=> setPassword(s.target.value)} required error={passwordError}/>
             </Grid>
             </Grid>
+            {errorMessage && (
+                            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                                {errorMessage}
+                            </Typography>
+            )}
             <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={(u)=> userRegister(u)}>Register</Button>
             <Grid container justifyContent={"flex-end"}>
               <Grid item>
