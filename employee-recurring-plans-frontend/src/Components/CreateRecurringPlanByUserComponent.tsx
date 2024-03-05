@@ -6,20 +6,21 @@ import { createUserPlan } from "../Service/Service";
 
 const CreateRecurringPlanByUserComponent =()=>{
     
-    const[salary,setSalary]=useState<number>()
+    const userId=localStorage.getItem("authenticatedUser");
     const[dob,setDob]=useState<Date | null>(null)
+    const[salary,setSalary]=useState<number>()
     const navigate=useNavigate();
     const[self_contribution_limit_401K,setSelf_Contribution_Limit_401K]=useState<number>();
     const[self_contribution_limit_HSA,setSelf_Contribution_Limit_HSA]=useState<number>();
     const[self_contribution_limit_FSA,setSelf_Contribution_Limit_FSA]=useState<number>();
     const[self_contribution_limit_ROTHIRA,setSelf_Contribution_Limit_ROTHIRA]=useState<number>();
-    const userId=localStorage.getItem("authenticatedUser");
+    
     async function createPlanByUser(){
         const createPlanByUserPayLoad = { id:userId,dob,salary,self_contribution_limit_401K,self_contribution_limit_HSA,self_contribution_limit_FSA, self_contribution_limit_ROTHIRA};
         console.log(createPlanByUserPayLoad);
         await createUserPlan(createPlanByUserPayLoad).then((response)=>{
           console.log(response);
-          navigate(`/getUserPlanById/${id}`);
+          navigate(`/getUserPlanById/${userId}`);
         });
     };
 

@@ -11,7 +11,7 @@ import {
   Button,
 } from "@mui/material";
 import { getAllUsersPlan } from "../Service/Service";
-import { NavLink ,useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 interface UserPlan {
   id: string;
@@ -36,19 +36,6 @@ interface UserPlan {
   };
 }
 
-interface ContributionAmounts {
-  [key: string]: number;
-}
-
-interface UserData {
-  age: number;
-  salary:number;
-  salaryAfterContributions: number;
-  selfContributionAmount: ContributionAmounts;
-  employerContributionAmount: ContributionAmounts;
-  totalContributionAmount: ContributionAmounts;
-}
-
 const ListUsersPlanComponent = () => {
   const [userPlans, setUserPlans] = useState<UserPlan[]>([]);
   const navigate =useNavigate();
@@ -62,7 +49,6 @@ const ListUsersPlanComponent = () => {
         console.error("Error fetching user plans:", error);
       }
     };
-
     fetchUserPlans();
   }, []);
 
@@ -110,6 +96,7 @@ const ListUsersPlanComponent = () => {
                   <Button  fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={()=> navigate(`/editEmployerContributions/${userPlan.id}`, {
                                             state: {
                                                 userPlanEmployerData: {
+                                                  employee_id:userPlan.id,
                                                   employee_salary:userPlan.salary,
                                                   self_contribution_limit_401K:userPlan.selfContributionAmount.self_contribution_amount_401K,
                                                   self_contribution_limit_HSA:userPlan.selfContributionAmount.self_contribution_amount_HSA,
@@ -120,7 +107,7 @@ const ListUsersPlanComponent = () => {
                                                   employer_contribution_limit_FSA: userPlan.employerContributionAmount.employer_contribution_amount_FSA,
                                                   employer_contribution_limit_ROTHIRA: userPlan.employerContributionAmount.employer_contribution_amount_ROTHIRA,
                                                 },
-                                            },
+                                            }
                     })}>
                     Edit Employer Contributions 
                   </Button>
@@ -138,13 +125,22 @@ const ListUsersPlanComponent = () => {
                 ):(
                   <>
                   <TableCell>
-                    <Button  fullWidth variant="contained" sx={{ mt: 2, mb: 1 }} >
-                    <NavLink to={`/createUserPlanByEmployer?id=${userPlan.id}`} />
-                    Add Employer Contributions
+                    <Button  fullWidth variant="contained" sx={{ mt: 2, mb: 1 }} onClick={()=> navigate(`/createUserPlanByEmployer?${userPlan.id}`,{
+                                            state: {
+                                              userPlanEmployerData: {
+                                                employee_id:userPlan.id,
+                                                employee_salary:userPlan.salary,
+                                                self_contribution_limit_401K:userPlan.selfContributionAmount.self_contribution_amount_401K,
+                                                self_contribution_limit_HSA:userPlan.selfContributionAmount.self_contribution_amount_HSA,
+                                                self_contribution_limit_FSA:userPlan.selfContributionAmount.self_contribution_amount_FSA,
+                                                self_contribution_limit_ROTHIRA:userPlan.selfContributionAmount.self_contribution_amount_ROTHIRA
+                                              },
+                                            }
+                    })}>Add Employer Contributions
                     </Button>
                   </TableCell>
                   <TableCell>
-                    After Employer COntributes Total Contributions will be calculated
+                    After Employer Contributes Total Contributions will be calculated
                   </TableCell>
                   </>
                 )
