@@ -11,7 +11,7 @@ import {
   Button,
 } from "@mui/material";
 import { getAllUsersPlan } from "../Service/Service";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface UserPlan {
   id: string;
@@ -36,8 +36,23 @@ interface UserPlan {
   };
 }
 
+interface ContributionAmounts {
+  [key: string]: number;
+}
+
+interface UserData {
+  age: number;
+  salary:number;
+  salaryAfterContributions: number;
+  selfContributionAmount: ContributionAmounts;
+  employerContributionAmount: ContributionAmounts;
+  totalContributionAmount: ContributionAmounts;
+}
+
 const ListUsersPlanComponent = () => {
   const [userPlans, setUserPlans] = useState<UserPlan[]>([]);
+  const navigate=useNavigate()
+  const [userData, setUserData] = useState<UserData | null>(null);
   // Fetch user plans on component mount
   useEffect(() => {
     const fetchUserPlans = async () => {
@@ -106,10 +121,19 @@ const ListUsersPlanComponent = () => {
                 ):(
                   <>
                   <TableCell>
-                    <Button  fullWidth variant="contained" sx={{ mt: 2, mb: 1 }}>
-                    <NavLink to={`/createUserPlanByEmployer?id=${userPlan.id}`} >
+                    <Button  fullWidth variant="contained" sx={{ mt: 2, mb: 1 }} onClick={() => navigate(`/createUserPlanByEmployer?id=${userPlan.id}`, {
+                                            state: {
+                                                userPlanData: {
+                                                    id:userPlan.id,
+                                                    salary: userPlan.salaryAfterContributions,
+                                                    self_contribution_limit_401K: userPlan.selfContributionAmount.self_contribution_amount_401K,
+                                                    self_contribution_limit_HSA: userPlan.selfContributionAmount.self_contribution_amount_HSA,
+                                                    self_contribution_limit_FSA: userPlan.selfContributionAmount.self_contribution_amount_FSA,
+                                                    self_contribution_limit_ROTHIRA: userPlan.selfContributionAmount.self_contribution_amount_ROTHIRA,
+                                                },
+                                            },
+                                        })}>
                     Add Employer Contributions
-                    </NavLink>
                     </Button>
                   </TableCell>
                   <TableCell>

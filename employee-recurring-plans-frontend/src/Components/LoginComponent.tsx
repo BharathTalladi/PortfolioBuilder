@@ -1,5 +1,5 @@
 import {useState}  from 'react';
-import { useNavigate,Link} from 'react-router-dom';
+import { useNavigate,Link,useLocation} from 'react-router-dom';
 import { loginUser,saveLoggedInUser,storeToken,isAdminUser } from '../Service/Service';
 import { LockOutlined } from "@mui/icons-material";
 import { Container, CssBaseline,Box,Avatar, Typography,TextField,Button, Grid,} from "@mui/material";
@@ -11,6 +11,8 @@ const LoginComponent = ()=>{
     const [idError, setIdError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const location = useLocation();
+    const [displayEmployeeId, setDisplayEmployeeId ] = useState<string>(location?.state?.data?.id);
     const navigate = useNavigate();
 
     async function userLogin(e: React.MouseEvent<HTMLButtonElement>){
@@ -69,6 +71,12 @@ return(
               </Grid>
             </Grid>
             </Box>
+            {displayEmployeeId && (
+                            <Typography variant="body1" color="InfoText" sx={{ mt: 1 }}>
+                            Successfully Registered!!! Your Employee Id is <b>{displayEmployeeId}</b>
+                            </Typography>
+            )
+            }
         </Box>
         </Container>
     </>
