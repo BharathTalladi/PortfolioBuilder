@@ -6,7 +6,7 @@ const FooterComponent = () => {
         <footer className='footer-component'>
                 <div className='footer-container'>
                     <div className='footer-left'>
-                    <h3 >Employee Portfolio Builder</h3> 
+                    <h3 >Employee Portfolio Builder </h3> 
                     </div>
                     <div className='footer-right'>
                         <p className="copyright">Copyright 1998-2024. All rights reserved.</p>
