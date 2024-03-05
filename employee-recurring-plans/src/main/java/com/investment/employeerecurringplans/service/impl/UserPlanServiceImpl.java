@@ -353,8 +353,11 @@ public class UserPlanServiceImpl implements UserPlanService {
             totalContributionAmount.setTotal_contribution_amount_FSA(selfFSAContributionAmount+employerFSAContributionAmount);
         }
         //when user doesn't contribute and employer contributes(user : 0+ employer 500=500)
-        else if(selfFSAContributionAmount == 0 && employerFSAContributionAmount>0){
+        else if(selfFSAContributionAmount == 0 && employerFSAContributionAmount<1000){
             totalContributionAmount.setTotal_contribution_amount_FSA(employerFSAContributionAmount);
+        }
+        else if(selfFSAContributionAmount == 0 && employerFSAContributionAmount>1000){
+            totalContributionAmount.setTotal_contribution_amount_FSA(1000.00);
         }
         //when user is < employer (1000+1500(not a match only 1000 applies)=2000)
         else if(selfFSAContributionAmount<employerFSAContributionAmount && employerFSAContributionAmount>1000){
@@ -365,7 +368,7 @@ public class UserPlanServiceImpl implements UserPlanService {
             totalContributionAmount.setTotal_contribution_amount_FSA(selfFSAContributionAmount+employerFSAContributionAmount);
         }
         //when user is > employee (1000+500=1500)
-        else if (selfFSAContributionAmount>employerFSAContributionAmount && employerFSAContributionAmount<1000){
+        else if (selfFSAContributionAmount>employerFSAContributionAmount){
             totalContributionAmount.setTotal_contribution_amount_FSA(selfFSAContributionAmount+employerFSAContributionAmount);
         }
         totalContributionAmount.setTotal_contribution_amount_HSA(selfContributionAmount.getSelf_contribution_amount_HSA()+employerContributionAmount.getEmployer_contribution_amount_HSA());
