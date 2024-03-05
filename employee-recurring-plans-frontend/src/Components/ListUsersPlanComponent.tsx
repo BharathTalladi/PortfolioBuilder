@@ -11,11 +11,11 @@ import {
   Button,
 } from "@mui/material";
 import { getAllUsersPlan } from "../Service/Service";
-import { NavLink } from "react-router-dom";
+import { NavLink ,useNavigate} from "react-router-dom";
 
 interface UserPlan {
   id: string;
-  salaryAfterContributions: number;
+  salary: number;
   selfContributionAmount: {
     self_contribution_amount_401K: number;
     self_contribution_amount_HSA: number;
@@ -38,6 +38,7 @@ interface UserPlan {
 
 const ListUsersPlanComponent = () => {
   const [userPlans, setUserPlans] = useState<UserPlan[]>([]);
+  const navigate =useNavigate();
   // Fetch user plans on component mount
   useEffect(() => {
     const fetchUserPlans = async () => {
@@ -51,6 +52,8 @@ const ListUsersPlanComponent = () => {
 
     fetchUserPlans();
   }, []);
+
+
   return (
     <TableContainer component={Paper}>
       <Typography variant="h6" sx={{ mb: 2 }}>
@@ -60,7 +63,7 @@ const ListUsersPlanComponent = () => {
         <TableHead>
           <TableRow>
             <TableCell>Employee ID</TableCell>
-            <TableCell>Gross Salary After Contributions</TableCell>
+            <TableCell>Salary</TableCell>
             <TableCell>Self Contributions</TableCell>
             <TableCell>Employer Contributions</TableCell>
             <TableCell>Total Retirement Contributions</TableCell>
@@ -71,7 +74,7 @@ const ListUsersPlanComponent = () => {
             <TableRow key={userPlan.id}>
               <TableCell>{userPlan.id}</TableCell>
               <TableCell>
-                $ {userPlan.salaryAfterContributions}
+                ${userPlan.salary}
               </TableCell>
               <TableCell>
                 <ul>
@@ -91,7 +94,23 @@ const ListUsersPlanComponent = () => {
                   <li>HSA: ${userPlan.employerContributionAmount.employer_contribution_amount_HSA}</li>
                   <li>FSA: ${userPlan.employerContributionAmount.employer_contribution_amount_FSA}</li>
                   <li>ROTHIRA: ${userPlan.employerContributionAmount.employer_contribution_amount_ROTHIRA}</li>
-                  <Button  fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>Edit Employer Contributions</Button>
+                  <Button  fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={()=> navigate(`/editEmployerContributions/${userPlan.id}`, {
+                                            state: {
+                                                userPlanEmployerData: {
+                                                  employee_salary:userPlan.salary,
+                                                  self_contribution_limit_401K:userPlan.selfContributionAmount.self_contribution_amount_401K,
+                                                  self_contribution_limit_HSA:userPlan.selfContributionAmount.self_contribution_amount_HSA,
+                                                  self_contribution_limit_FSA:userPlan.selfContributionAmount.self_contribution_amount_FSA,
+                                                  self_contribution_limit_ROTHIRA:userPlan.selfContributionAmount.self_contribution_amount_ROTHIRA,
+                                                  employer_contribution_limit_401k: userPlan.employerContributionAmount.employer_contribution_amount_401k,
+                                                  employer_contribution_limit_HSA: userPlan.employerContributionAmount.employer_contribution_amount_HSA,
+                                                  employer_contribution_limit_FSA: userPlan.employerContributionAmount.employer_contribution_amount_FSA,
+                                                  employer_contribution_limit_ROTHIRA: userPlan.employerContributionAmount.employer_contribution_amount_ROTHIRA,
+                                                },
+                                            },
+                    })}>
+                    Edit Employer Contributions 
+                  </Button>
                 </ul>
               </TableCell>
               <TableCell>
@@ -106,8 +125,9 @@ const ListUsersPlanComponent = () => {
                 ):(
                   <>
                   <TableCell>
-                    <Button  fullWidth variant="contained" sx={{ mt: 2, mb: 1 }}>
+                    <Button  fullWidth variant="contained" sx={{ mt: 2, mb: 1 }} >
                     <NavLink to={`/createUserPlanByEmployer?id=${userPlan.id}`} >
+
                     Add Employer Contributions
                     </NavLink>
                     </Button>
