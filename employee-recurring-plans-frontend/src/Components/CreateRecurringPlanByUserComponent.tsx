@@ -1,47 +1,26 @@
 import { useState } from "react";
 import { Container,Box, Typography,Button,TextField,Avatar,Grid, FormHelperText} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import { NavLink } from "react-router-dom";
+import { NavLink ,useNavigate} from "react-router-dom";
 import { createUserPlan } from "../Service/Service";
 
-
-interface CreatePlanByUser {
-  id: string;
-  dob: Date | null; // Date is nullable to allow for empty date selection
-  salary: number;
-  self_contribution_limit_401K: number;
-  self_contribution_limit_HSA: number;
-  self_contribution_limit_FSA: number; 
-  self_contribution_limit_ROTHIRA: number;
-}
-
-const CreateRecurringPlanByUserComponent =({userId}: {userId: string})=>{
-    const[id]=useState(userId);
-    const[salary,setSalary]=useState<number>(0.0)
+const CreateRecurringPlanByUserComponent =()=>{
+    
+    const[salary,setSalary]=useState<number>()
     const[dob,setDob]=useState<Date | null>(null)
-    const[self_contribution_limit_401K,setSelf_Contribution_Limit_401K]=useState<number>(0.0);
-    const[self_contribution_limit_HSA,setSelf_Contribution_Limit_HSA]=useState<number>(0.0);
-    const[self_contribution_limit_FSA,setSelf_Contribution_Limit_FSA]=useState<number>(0.0);
-    const[self_contribution_limit_ROTHIRA,setSelf_Contribution_Limit_ROTHIRA]=useState<number>(0.0);
-
-    const createPlanByUser = async () => {
-      try {
-        const createUserPlanData: CreatePlanByUser = {
-          id,
-          dob,
-          salary,
-          self_contribution_limit_401K,
-          self_contribution_limit_HSA,
-          self_contribution_limit_FSA,
-          self_contribution_limit_ROTHIRA
-        };
-  
-        const response=await createUserPlan(createUserPlanData);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-        // Handle API errors (e.g., display error message to user)
-      }
+    const navigate=useNavigate();
+    const[self_contribution_limit_401K,setSelf_Contribution_Limit_401K]=useState<number>();
+    const[self_contribution_limit_HSA,setSelf_Contribution_Limit_HSA]=useState<number>();
+    const[self_contribution_limit_FSA,setSelf_Contribution_Limit_FSA]=useState<number>();
+    const[self_contribution_limit_ROTHIRA,setSelf_Contribution_Limit_ROTHIRA]=useState<number>();
+    const userId=localStorage.getItem("authenticatedUser");
+    async function createPlanByUser(){
+        const createPlanByUserPayLoad = { id:userId,dob,salary,self_contribution_limit_401K,self_contribution_limit_HSA,self_contribution_limit_FSA, self_contribution_limit_ROTHIRA};
+        console.log(createPlanByUserPayLoad);
+        await createUserPlan(createPlanByUserPayLoad).then((response)=>{
+          console.log(response);
+          navigate(`/getUserPlanById/${id}`);
+        });
     };
 
     return(
@@ -53,7 +32,7 @@ const CreateRecurringPlanByUserComponent =({userId}: {userId: string})=>{
         <Typography variant="h5">Create Retirement Investments Recurring Plan</Typography>
         <Grid container spacing={2}>
         <Grid item xs={12}>
-        <TextField value={id} name='id' label="Employee ID" sx={{ m: 1 , fontWeight:'bold'}} id="id"  margin="normal" fullWidth autoFocus disabled/>
+        <TextField value={userId} name='id' label="Employee ID" sx={{ m: 1 , fontWeight:'bold'}} id="id"  margin="normal" fullWidth autoFocus disabled/>
         </Grid>
         <Grid item xs={6} md={6}>
           <TextField name='dob' label="Enter Date of Birth" placeholder="MM/DD/YYYY" sx={{ m: 1 }} id="dob"  margin="normal" fullWidth autoFocus onChange={(s) => {
@@ -89,8 +68,11 @@ const CreateRecurringPlanByUserComponent =({userId}: {userId: string})=>{
         <FormHelperText  sx={{ m: 1, fontWeight: 'bold',color: "secondary.main"}} >Employee can only contribute maximum of $8000 if age is more than 50yrs or else $7000 to ROTH IRA Account</FormHelperText>
         </Grid>
         </Grid>
-        <Button sx={{ mt:0.8, marginLeft: "12px",backgroundColor: "#FFF" }} variant="contained"  onClick={createPlanByUser}>
-          <NavLink to={`/getUserPlanById/${id}`}>Save</NavLink>
+        <Button sx={{ mt:0.8, marginLeft: "12px",backgroundColor: "#FFF" }} variant="contained"  onClick={(createPlanByUser)}>
+          <NavLink to={`/getUserPlanById/${userId}`}>Save</NavLink>
+        </Button>
+        <Button sx={{ mt:0.8, marginLeft: "12px",backgroundColor: "#FFF" }} variant="contained">
+          <NavLink to={`/getUserPlanById/${userId}`}>Cancel</NavLink>
         </Button>
       </Box>
     </Container>

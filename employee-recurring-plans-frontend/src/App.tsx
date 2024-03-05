@@ -22,9 +22,7 @@ function App() {
     }
     return <Navigate to="/"/>
   }
-
-  const userId=localStorage.getItem("authenticatedUser");;
-  
+    
   return (
     <>
       <HeaderComponent/>
@@ -36,7 +34,7 @@ function App() {
         <Route path="/getAllUsersPlan" element={<AuthenticatedRoute><ListUsersPlanComponent/></AuthenticatedRoute>}></Route>
         <Route path="/editUserContributions/:id" element={<AuthenticatedRoute><EditUserContributionsComponent/></AuthenticatedRoute>}></Route>
         <Route path="/editEmployerContributions/:id" element={<AuthenticatedRoute><EditEmployerContributionsComponent/></AuthenticatedRoute>}></Route>
-        <Route path="/createUserPlan" element={<AuthenticatedRoute><CreateRecurringPlanByUserComponent userId={userId} /></AuthenticatedRoute>}></Route>
+        <Route path="/createUserPlan" element={<AuthenticatedRoute><CreateRecurringPlanByUserComponent/></AuthenticatedRoute>}></Route>
         <Route path="/createUserPlanByEmployer" element={<AuthenticatedRoute><CreateUserRecurringPlanByEmployerComponent/></AuthenticatedRoute>}></Route>
       </Routes>
       <FooterComponent/>

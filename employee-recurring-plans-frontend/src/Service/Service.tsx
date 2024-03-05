@@ -83,8 +83,8 @@ interface CreatePlanByUser{
     self_contribution_limit_ROTHIRA: number 
 }
 
-export const createUserPlan=(createUserPlanByData: CreatePlanByUser)=>{
-    return axios.post(`${BASE_API_URL}/createUserPlan`,createUserPlanByData,authConfig)
+export const createUserPlan=(creatPlanByUserData: CreatePlanByUser)=>{
+    return axios.post(`${BASE_API_URL}/createUserPlan`,creatPlanByUserData,authConfig)
 }
 
 interface CreateUserPlanByEmployer{

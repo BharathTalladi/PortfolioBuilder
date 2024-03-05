@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getUserPlanById } from '../Service/Service';
-import { NavLink, useParams,useNavigate } from 'react-router-dom';
+import {  useParams,useNavigate } from 'react-router-dom';
 import { Table, TableCell, TableContainer, TableHead, TableRow, Button, TableBody } from '@mui/material';
 
 interface ContributionAmounts {
@@ -156,8 +156,8 @@ const UserPlanComponent = () => {
                     ) : (
                         <>
                         <br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                        <Button sx={{ marginLeft: "10px", backgroundColor: "#FFF" }} variant="contained">
-                            <NavLink to="/createUserPlan">Create User Plan</NavLink>
+                        <Button sx={{ mt:0.8, marginLeft: "12px",backgroundColor: "#FFF" }} variant="contained" onClick={()=> navigate(`/createUserPlan`)}>
+                           Create User Plan
                         </Button>
                         </>
                     )

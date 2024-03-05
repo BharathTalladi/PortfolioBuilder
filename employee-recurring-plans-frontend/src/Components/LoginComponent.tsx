@@ -12,7 +12,7 @@ const LoginComponent = ()=>{
     const [passwordError, setPasswordError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const location = useLocation();
-    const [displayEmployeeId, setDisplayEmployeeId ] = useState<string>(location?.state?.data?.id);
+    const [displayEmployeeId ] = useState<string>(location?.state?.data?.id);
     const navigate = useNavigate();
 
     async function userLogin(e: React.MouseEvent<HTMLButtonElement>){

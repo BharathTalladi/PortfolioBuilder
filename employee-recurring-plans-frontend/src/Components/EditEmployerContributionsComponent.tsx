@@ -25,11 +25,13 @@ const EditEmployerContributionsComponent = () => {
   const [employee_contribution_limit_FSA]=useState<number>(location?.state?.userPlanEmployerData?.self_contribution_limit_HSA);
   const [employee_contribution_limit_ROTHIRA]=useState<number>(location?.state?.userPlanEmployerData?.self_contribution_limit_ROTHIRA);
 
+
   async function updateEmployerContributions(){
     const editEmployerContributionDetails={employer_contribution_limit_401k,employer_contribution_limit_HSA,employer_contribution_limit_FSA,employer_contribution_limit_ROTHIRA};
         console.log(editEmployerContributionDetails);
 
     await editEmployerContributions(id,editEmployerContributionDetails).then((response)=>{
+      console.log(response);
       navigate(`/getAllUsersPlan`, {
         state: {
           ...location.state, // Keep the existing state
