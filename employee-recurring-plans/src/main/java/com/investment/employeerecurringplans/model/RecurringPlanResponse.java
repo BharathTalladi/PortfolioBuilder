@@ -12,6 +12,7 @@ public class RecurringPlanResponse {
     private String id;
     private String name;
     private int age;
+    private int year;
     private double salary;
     private double salaryAfterContributions;
     private SelfContributionAmount selfContributionAmount;

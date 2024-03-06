@@ -18,12 +18,10 @@ const EditEmployerContributionsComponent = () => {
   const [employee_contribution_limit_ROTHIRA]=useState<number>(location?.state?.userPlanEmployerData?.self_contribution_limit_ROTHIRA);
 
 
+
   async function updateEmployerContributions(){
     const editEmployerContributionDetails={employer_contribution_limit_401k,employer_contribution_limit_HSA,employer_contribution_limit_FSA,employer_contribution_limit_ROTHIRA};
-        console.log(editEmployerContributionDetails);
-
-    await editEmployerContributions(id,editEmployerContributionDetails).then((response)=>{
-      console.log(response);
+    await editEmployerContributions(id,editEmployerContributionDetails).then(()=>{
       navigate(`/getAllUsersPlan`, {
         state: {
           ...location.state, // Keep the existing state
@@ -54,10 +52,11 @@ const EditEmployerContributionsComponent = () => {
             <TextField value={employer_contribution_limit_401k}  name="employer_contribution_limit_401k"  label="Edit Employer 401k Contribution"  sx={{ m: 1 }} id="employer_contribution_limit_401k"  margin="normal"  fullWidth  autoFocus  onChange={(s) =>  setEmployer_Contribution_Limit_401k(Number(s.target.value))}/>
             </Grid>
             <Grid item xs={4}>
-            <FormHelperText  sx={{ m: 1, fontWeight: 'bold',color: "secondary.main", width: "100%" }} >Employer should match 100% to employee 401k Account</FormHelperText>
+             <FormHelperText sx={{ m: 1, fontWeight: 'bold', color: "red", width: "100%" }}></FormHelperText>
             </Grid>
             <Grid item xs={4}>
             <TextField value={employee_contribution_limit_401k} name="employee_contribution_limit_401k"  label="Employee 401k Contribution" sx={{ m: 1 }} id="employee_contribution_limit_401k"  margin="normal" fullWidth  autoFocus disabled/>
+            
             </Grid>
             <Grid item xs={4}>
             <TextField  value={employer_contribution_limit_HSA}  name="employer_contribution_limit_HSA"  label="Edit Employer HSA Contribution"  sx={{ m: 1 }} id="employer_contribution_limit_HSA"  margin="normal"  fullWidth  autoFocus  onChange={(s) => setEmployer_Contribution_Limit_HSA(Number(s.target.value))}/>

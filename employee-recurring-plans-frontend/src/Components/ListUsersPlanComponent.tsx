@@ -6,7 +6,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   Typography,
   Button,
 } from "@mui/material";
@@ -55,8 +54,8 @@ const ListUsersPlanComponent = () => {
 
   return (
     <TableContainer className='TableContainer'>
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        Users' Plans
+      <Typography variant="h6" sx={{  mt:2}}>
+        Employee's Investment Recurring Plans
       </Typography>
       <Table>
         <TableHead>

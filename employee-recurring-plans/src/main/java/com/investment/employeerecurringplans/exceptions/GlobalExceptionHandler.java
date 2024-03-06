@@ -35,6 +35,18 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(CurrentYearRecurringPlanNotFoundException.class)
+    public ResponseEntity<?> handleCurrentYearRecurringPlanNotFoundException(CurrentYearRecurringPlanNotFoundException exception, WebRequest request){
+        ErrorResponse errorDetails =
+                new ErrorResponse(
+                        request.getDescription(false),
+                        HttpStatus.CONTINUE,
+                        exception.getMessage(),
+                        LocalDateTime.now());
+        return new ResponseEntity<>(errorDetails, HttpStatus.OK
+        );
+    }
+
     // handling global exception
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globalExceptionHandling(Exception exception, WebRequest request){

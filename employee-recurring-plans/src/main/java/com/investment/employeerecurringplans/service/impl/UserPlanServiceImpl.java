@@ -4,6 +4,7 @@ package com.investment.employeerecurringplans.service.impl;
 import com.investment.employeerecurringplans.constants.RecurringPlanConstants;
 import com.investment.employeerecurringplans.entity.EmployerContributionsToUser;
 import com.investment.employeerecurringplans.entity.UserRecurringPlanDetails;
+import com.investment.employeerecurringplans.exceptions.CurrentYearRecurringPlanNotFoundException;
 import com.investment.employeerecurringplans.exceptions.RecurringPlanContributionException;
 import com.investment.employeerecurringplans.exceptions.UserPlanDetailsNotFoundException;
 import com.investment.employeerecurringplans.model.*;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.*;
 
 @Service
@@ -31,12 +33,17 @@ public class UserPlanServiceImpl implements UserPlanService {
         userRecurringPlanDetails.setUserId(request.getId());
         userRecurringPlanDetails.setDob(request.getDob());
         userRecurringPlanDetails.setSalary(request.getSalary());
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, Year.now().getValue());
+        userRecurringPlanDetails.setYear(calendar.getTime());
         // Calculate contribution limits
         SelfContributionAmount selfContributionAmount = validateAndCalculateSelfContributionLimits(request, userRecurringPlanDetails);
         // Calculate salaryAfterContributions
         double salaryAfterContributions = calculateSalaryAfterContributions(request.getSalary(), selfContributionAmount);
         userRecurringPlanDetailsRepository.save(userRecurringPlanDetails);
         RecurringPlanUserResponse response=new RecurringPlanUserResponse();
+        response.setSalary(request.getSalary());
+        response.setYear(Year.now().getValue());
         response.setAge(calculateAge(request.getDob()));
         response.setSalaryAfterContributions(salaryAfterContributions);
         response.setSelfContributionAmount(selfContributionAmount);
@@ -146,34 +153,45 @@ public class UserPlanServiceImpl implements UserPlanService {
         // Check if both entities exist
         if (userRecurringPlanDetailsOptional.isPresent()) {
             UserRecurringPlanDetails userRecurringPlanDetails = userRecurringPlanDetailsOptional.get();
-            response.setSalary(userRecurringPlanDetails.getSalary());
-            response.setId(userRecurringPlanDetails.getUserId());
-            response.setAge(calculateAge(userRecurringPlanDetails.getDob()));
-            response.setName(userRecurringPlanDetails.getUser().getName());
-            // Calculate self contribution amount
-            SelfContributionAmount selfContributionAmount = getSelfContributionAmount(userRecurringPlanDetails);
-            if(employerContributionsToUserOptional.isPresent()){
-                EmployerContributionsToUser employerContributionsToUser = employerContributionsToUserOptional.get();
-                // Calculate employer contribution amount
-                EmployerContributionAmount employerContributionAmount = getEmployerContributionAmount(employerContributionsToUser);
-                // Calculate total contribution amount
-                TotalContributionAmount totalContributionAmount = calculateTotalRecurringPlanContributions(selfContributionAmount, employerContributionAmount);
+            Date userContributionYearDate = userRecurringPlanDetailsOptional.get().getYear();
+            // Convert Date to Calendar
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(userContributionYearDate);
+            int userContributionYear = calendar.get(Calendar.YEAR);
+            if(Year.now().getValue() ==userContributionYear){
+                response.setSalary(userRecurringPlanDetails.getSalary());
+                response.setId(userRecurringPlanDetails.getUserId());
+                response.setAge(calculateAge(userRecurringPlanDetails.getDob()));
+                response.setName(userRecurringPlanDetails.getUser().getName());
+                response.setYear(Year.now().getValue());
+                // Calculate self contribution amount
+                SelfContributionAmount selfContributionAmount = getSelfContributionAmount(userRecurringPlanDetails);
+                if(employerContributionsToUserOptional.isPresent()){
+                    EmployerContributionsToUser employerContributionsToUser = employerContributionsToUserOptional.get();
+                    // Calculate employer contribution amount
+                    EmployerContributionAmount employerContributionAmount = getEmployerContributionAmount(employerContributionsToUser);
+                    // Calculate total contribution amount
+                    TotalContributionAmount totalContributionAmount = calculateTotalRecurringPlanContributions(selfContributionAmount, employerContributionAmount);
+                    response.setSelfContributionAmount(selfContributionAmount);
+                    response.setEmployerContributionAmount(employerContributionAmount);
+                    response.setTotalContributionAmount(totalContributionAmount);
+                }
+                else {
+                    EmployerContributionAmount employerContributionAmount = new EmployerContributionAmount();
+                    employerContributionAmount.setMessage(RecurringPlanConstants.ERROR_MESSAGE_EMPLOYER_CONTRIBUTION_AMOUNT);
+                    TotalContributionAmount totalContributionAmount = new TotalContributionAmount();
+                    totalContributionAmount.setMessage(RecurringPlanConstants.ERROR_MESSAGE_TOTAL_CONTRIBUTION_AMOUNT);
+                    response.setEmployerContributionAmount(employerContributionAmount);
+                    response.setTotalContributionAmount(totalContributionAmount);
+                }
+                // Calculate salary after contributions
+                double salaryAfterContributions = calculateSalaryAfterContributions(userRecurringPlanDetails.getSalary(), selfContributionAmount);
+                response.setSalaryAfterContributions(salaryAfterContributions);
                 response.setSelfContributionAmount(selfContributionAmount);
-                response.setEmployerContributionAmount(employerContributionAmount);
-                response.setTotalContributionAmount(totalContributionAmount);
             }
-            else {
-                EmployerContributionAmount employerContributionAmount = new EmployerContributionAmount();
-                employerContributionAmount.setMessage(RecurringPlanConstants.ERROR_MESSAGE_EMPLOYER_CONTRIBUTION_AMOUNT);
-                TotalContributionAmount totalContributionAmount = new TotalContributionAmount();
-                totalContributionAmount.setMessage(RecurringPlanConstants.ERROR_MESSAGE_TOTAL_CONTRIBUTION_AMOUNT);
-                response.setEmployerContributionAmount(employerContributionAmount);
-                response.setTotalContributionAmount(totalContributionAmount);
+            else{
+                throw new CurrentYearRecurringPlanNotFoundException("Recurring Plan not found for: "+Year.now().getValue());
             }
-            // Calculate salary after contributions
-            double salaryAfterContributions = calculateSalaryAfterContributions(userRecurringPlanDetails.getSalary(), selfContributionAmount);
-            response.setSalaryAfterContributions(salaryAfterContributions);
-            response.setSelfContributionAmount(selfContributionAmount);
         } else {
             throw new UserPlanDetailsNotFoundException("User Plan Details not Found: " +id);
         }
@@ -241,10 +259,10 @@ public class UserPlanServiceImpl implements UserPlanService {
             }
             if (userRequest.getSelf_contribution_limit_401K() != null) {
                 double contribution401K = userRequest.getSelf_contribution_limit_401K();
-                if (contribution401K > 6.0) {
+                if (contribution401K > (userRecurringPlanDetails.getSalary())*6/100) {
                     throw new RecurringPlanContributionException("User cannot contribute more than 6% of salary to their 401k account");
                 }
-                userRecurringPlanDetails.setSelf_contribution_limit_401K(userRecurringPlanDetails.getSalary()*contribution401K/100);
+                userRecurringPlanDetails.setSelf_contribution_limit_401K(contribution401K);
             }
             if (userRequest.getSelf_contribution_limit_HSA() != null) {
                 double contributionHSA = userRequest.getSelf_contribution_limit_HSA();
