@@ -11,10 +11,15 @@ import EditUserContributionsComponent from './Components/EditUserContributionsCo
 import CreateRecurringPlanByUserComponent from './Components/CreateRecurringPlanByUserComponent'
 import ListUsersPlanComponent from './Components/ListUsersPlanComponent'
 import CreateUserRecurringPlanByEmployerComponent from './Components/CreateUserRecurringPlanByEmployerComponent'
-
+import background from './assets/background.jpg'
 function App() {
 
-
+  const myStyle = {
+    backgroundImage: `url(${background})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    height: "70vh",
+};
   function AuthenticatedRoute({ children }: { children: React.ReactNode }){
     const isUserAuthenticated=isUserLoggedIn();
     if(isUserAuthenticated){
@@ -25,6 +30,7 @@ function App() {
     
   return (
     <>
+      <div style={myStyle}>
       <HeaderComponent/>
       <Routes>
         <Route path="/" element={<LoginComponent/>}></Route>
@@ -38,7 +44,7 @@ function App() {
         <Route path="/createUserPlanByEmployer" element={<AuthenticatedRoute><CreateUserRecurringPlanByEmployerComponent/></AuthenticatedRoute>}></Route>
       </Routes>
       <FooterComponent/>
-
+      </div>
     </>
   )
 }

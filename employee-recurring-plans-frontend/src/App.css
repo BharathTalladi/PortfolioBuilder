@@ -55,19 +55,32 @@ justify-content: center !important;
 
 .css-rqglhn-MuiTable-root {
   margin-top: 2rem;
-border: inset !important;
+width: 95% !important;
+margin-left: auto;
+margin-right: auto;
   
 }
 
 .TableContainer {
-  margin-top: 2rem;
+  margin-top: 4rem;
+  /* border-radius: 20px;
+  height: 800px;
+  padding: 0;
+  overflow: scroll; */
   
 }
+
+/* Table thead{
+  position: sticky;
+  top: 0px;
+  margin: 0 0 0 0;
+} */
 
 .css-1ygcj2i-MuiTableCell-root {
   background: #d4e3ef !important;
   padding: 0.5rem !important;
   font-weight: 600 !important;
+  text-align: -webkit-center !important;
 }
 
 .css-1ex1afd-MuiTableCell-root .columnHeader{
@@ -83,4 +96,21 @@ border: inset !important;
 
 .editbutton{
   text-align: right !important;
+}
+
+.editButton{
+  line-height: 1.25;
+}
+.informationTable{
+  width: 25% !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.css-1mklbv5-MuiButtonBase-root-MuiButton-root {
+  margin-left: 1rem !important;
+}
+
+.css-11xur9t-MuiPaper-root-MuiTableContainer-root {
+   background-color: none !important;
 }

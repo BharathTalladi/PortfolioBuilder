@@ -8,6 +8,7 @@ interface ContributionAmounts {
 }
 
 interface UserData {
+    name: String;
     age: number;
     salary:number;
     salaryAfterContributions: number;
@@ -38,31 +39,37 @@ const UserPlanComponent = () => {
 
     return ( userData?.selfContributionAmount ? (
                 <TableContainer className='TableContainer'>
-                           <Table>
+                           <Table className='informationTable'>
                            <TableHead>
                                     <TableRow>
-                                        <TableCell colSpan={3}>Employee Details</TableCell>
+                                        <TableCell colSpan={2}>Employee Details</TableCell>
                                     </TableRow>
                                 </TableHead>
                             <TableBody>
+                            <TableRow className='columnHeader'>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell>{userData.name}</TableCell>
+                                    </TableRow>
                                     <TableRow className='columnHeader'>
                                         <TableCell>Age</TableCell>
-                                        <TableCell>Salary</TableCell>
-                                        <TableCell>Gross Salary After Contributions</TableCell>
+                                        <TableCell>{userData.age}years</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell>{userData.age}years</TableCell>
+                                        <TableCell>Salary</TableCell>
                                         <TableCell>${userData.salary}</TableCell>
-                                        <TableCell>${userData.salaryAfterContributions}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                    <TableCell>Salary After Contributions</TableCell>
+                                    <TableCell>${userData.salaryAfterContributions}</TableCell>
                                     </TableRow>
                                 </TableBody>
-                                <br/>
-                                <br/>
+                                </Table>
+                                <Table>
                                 <TableHead sx={{ marginTop:"10px" }} >
                                     <TableRow>
-                                        <TableCell colSpan={3}>Self Contributions</TableCell>
-                                        <TableCell colSpan={1} className='editbutton'>
-                                        <Button fullWidth variant="contained" sx={{ mt: 0.5, mb: 0.5 }} onClick={() => navigate(`/editUserContributions/${id}`, {
+                                        <TableCell colSpan={4}>Self Contributions
+                                        
+                                        <Button className='editButton' variant="contained" sx={{ mt: 0.5, mb: 0.5 }} onClick={() => navigate(`/editUserContributions/${id}`, {
                                             state: {
                                                 userPlanData: {
                                                     salary: userData.salary,
@@ -73,7 +80,7 @@ const UserPlanComponent = () => {
                                                 },
                                             },
                                         })}>
-                                            Edit User Contributions
+                                            Update
                                         </Button>
                                         </TableCell>
                                     </TableRow>
@@ -163,12 +170,12 @@ const UserPlanComponent = () => {
                     ) : (
                         <>
                         <br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                        <Button sx={{ mt:0.8, marginLeft: "12px",backgroundColor: "#FFF" }} variant="contained" onClick={()=> navigate(`/createUserPlan`)}>
-                           Create User Plan
+                        <Button sx={{ mt:0.8, marginLeft: "12px" }} variant="contained" onClick={()=> navigate(`/createUserPlan`)}>
+                           Create your Plan
                         </Button>
                         </>
                     )
-                
+            
     );
 };
 

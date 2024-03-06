@@ -54,7 +54,7 @@ const ListUsersPlanComponent = () => {
 
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer className='TableContainer'>
       <Typography variant="h6" sx={{ mb: 2 }}>
         Users' Plans
       </Typography>

@@ -23,7 +23,10 @@ public class UserPlanServiceImpl implements UserPlanService {
 
     private final UserRecurringPlanDetailsRepository userRecurringPlanDetailsRepository ;
     private final EmployerContributionsToUserRepository employerContributionsToUserRepository;
+
+
     public RecurringPlanUserResponse createUserPlan(RecurringPlanUserRequest request) throws ParseException {
+
         UserRecurringPlanDetails userRecurringPlanDetails=new UserRecurringPlanDetails();
         userRecurringPlanDetails.setUserId(request.getId());
         userRecurringPlanDetails.setDob(request.getDob());
@@ -146,6 +149,7 @@ public class UserPlanServiceImpl implements UserPlanService {
             response.setSalary(userRecurringPlanDetails.getSalary());
             response.setId(userRecurringPlanDetails.getUserId());
             response.setAge(calculateAge(userRecurringPlanDetails.getDob()));
+            response.setName(userRecurringPlanDetails.getUser().getName());
             // Calculate self contribution amount
             SelfContributionAmount selfContributionAmount = getSelfContributionAmount(userRecurringPlanDetails);
             if(employerContributionsToUserOptional.isPresent()){
