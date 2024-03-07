@@ -10,9 +10,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ErrorResponse {
 
-    private  String apiPath;
+    // The path of the API where the error occurred
+    private String apiPath;
+
+    // The HTTP status code indicating the type of error
     private HttpStatus errorCode;
-    private  String errorMessage;
+
+    // A message describing the error in detail
+    private String errorMessage;
+
+    // The timestamp when the error occurred
     private LocalDateTime errorTime;
 
 }

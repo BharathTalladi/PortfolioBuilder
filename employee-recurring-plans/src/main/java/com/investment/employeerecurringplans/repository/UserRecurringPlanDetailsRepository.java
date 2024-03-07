@@ -8,5 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface UserRecurringPlanDetailsRepository extends JpaRepository<UserRecurringPlanDetails, String> {
+
+    // Method to find a UserRecurringPlanDetails entity by its userId
+    // Spring Data JPA automatically generates the query based on the method name
     Optional<UserRecurringPlanDetails> findByUserId(String id);
 }

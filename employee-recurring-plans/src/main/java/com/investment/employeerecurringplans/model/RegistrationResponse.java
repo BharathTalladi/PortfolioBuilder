@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class RegistrationResponse {
+    // User ID
     private String id;
+
+    // Message indicating the result of the registration process
     private String message;
 }

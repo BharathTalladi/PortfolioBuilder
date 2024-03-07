@@ -27,9 +27,11 @@ public class SecurityConfiguration {
 
     private final JwtFilter jwtFilter;
     private final UserService userService;
+    // Defining a custom security filter chain
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 return http.cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
+                    // Configuring CORS (Cross-Origin Resource Sharing)
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
                     config.setAllowedMethods(Collections.singletonList("*"));
@@ -39,27 +41,32 @@ public class SecurityConfiguration {
                     config.setMaxAge(3600L);
                     return config;
                 }))
+                        // Disable CSRF (Cross-Site Request Forgery) protection
                 .csrf(AbstractHttpConfigurer::disable)
+                        // Configure URL authorization rules
                     .authorizeHttpRequests(request ->
-                        request.requestMatchers("/contributions/register","/contributions/login").permitAll()
+                        request.requestMatchers("/contributions/register","/contributions/login").permitAll()// Allow registration and login endpoints
                                 .requestMatchers("/contributions/createUserPlan",
-                                        "contributions/getUserPlanById/**","/contributions/editUserContributions/**").hasAuthority(Role.USER.name())
+                                        "contributions/getUserPlanById/**","/contributions/editUserContributions/**").hasAuthority(Role.USER.name())// Require USER role for accessing endpoints
                                 .requestMatchers("/contributions/createUserPlanByEmployer",
-                                                 "/contributions/getAllUsersPlan","/contributions/editEmployerContributions/**").hasAuthority(Role.ADMIN.name())
+                                                 "/contributions/getAllUsersPlan","/contributions/editEmployerContributions/**").hasAuthority(Role.ADMIN.name())// Require ADMIN role for accessing endpoints
                                 .anyRequest()
-                                .authenticated()
+                                .authenticated() // Requires authentication for all other endpoints
                 )
+                        // Configure session management to be STATELESS (no sessions)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        // Configure authentication provider
                 .authenticationProvider(authenticationProvider())
+                        // Add JWT filter before UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
+    // Configuring password encoder
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    // Configure authentication provider using DAO
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
@@ -67,6 +74,7 @@ public class SecurityConfiguration {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
+    // Configure authentication manager
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();

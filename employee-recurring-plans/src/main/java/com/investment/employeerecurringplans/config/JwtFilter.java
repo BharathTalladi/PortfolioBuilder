@@ -27,29 +27,38 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+        //Retrieving the Authorization Header from the Request
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userId;
+        // If Authorization header is missing or does not start with "Bearer ", continue to the next filter
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request,response);
             return;
         }
+        // Extracting the JWT token from the Authorization header
         jwt= authHeader.substring(7);
         userId = jwtService.extractUsername(jwt);
+        // If the userId is not null and no authentication is present in the SecurityContext, attempt to authenticate the user
         if(userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userId);
+            // Validating the JWT token
             if(jwtService.validateToken(jwt, userDetails)) {
+                // Create an authentication token for the user
                 SecurityContext securityContext=SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );
+                // Set additional authentication details
                 token.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
+                // Create a new SecurityContext and set the authentication token
                 securityContext.setAuthentication(token);
                 SecurityContextHolder.setContext(securityContext);
             }
         }
+        // Continue to the next filter in the chain
         filterChain.doFilter(request, response);
     }
 }

@@ -26,7 +26,8 @@ public class UserPlanServiceImpl implements UserPlanService {
     private final UserRecurringPlanDetailsRepository userRecurringPlanDetailsRepository ;
     private final EmployerContributionsToUserRepository employerContributionsToUserRepository;
 
-
+    //createUserPlan: This method creates a new user recurring plan based on the provided request.
+    // It calculates contribution limits, salary after contributions, and constructs a response containing relevant details.
     public RecurringPlanUserResponse createUserPlan(RecurringPlanUserRequest request) throws ParseException {
 
         UserRecurringPlanDetails userRecurringPlanDetails=new UserRecurringPlanDetails();
@@ -49,6 +50,8 @@ public class UserPlanServiceImpl implements UserPlanService {
         response.setSelfContributionAmount(selfContributionAmount);
         return response;
     }
+    //validateAndCalculateSelfContributionLimits:
+    // This method validates and calculates self-contribution limits for various plans like 401K, HSA, FSA, and ROTH IRA based on user input and age.
     private SelfContributionAmount validateAndCalculateSelfContributionLimits(RecurringPlanUserRequest request, UserRecurringPlanDetails details) throws ParseException {
         SelfContributionAmount selfContributionAmount=new SelfContributionAmount();
         // Calculate 401K contribution limit
@@ -85,6 +88,8 @@ public class UserPlanServiceImpl implements UserPlanService {
         details.setSelf_contribution_limit_ROTHIRA(rothIra);
         return selfContributionAmount;
     }
+
+    //calculateSalaryAfterContributions: This method calculates the salary after deducting self-contributions from the total salary.
     private double calculateSalaryAfterContributions(double salary, SelfContributionAmount selfContributionAmount) {
         double totalSelfContributionAmount = selfContributionAmount.getSelf_contribution_amount_401K() +
                 selfContributionAmount.getSelf_contribution_amount_HSA() +
@@ -92,6 +97,9 @@ public class UserPlanServiceImpl implements UserPlanService {
                 selfContributionAmount.getSelf_contribution_amount_ROTHIRA();
         return salary - totalSelfContributionAmount;
     }
+
+    // createUserPlanByEmployer: This method creates a user plan by the employer.
+    //It validates and calculates employer contributions and constructs a response containing the contribution amount.
     public RecurringPlanEmployerResponse createUserPlanByEmployer(RecurringPlanEmployerRequest request) {
         // Check if user exists in the database
         Optional<UserRecurringPlanDetails> userRecurringPlanDetails = userRecurringPlanDetailsRepository.findByUserId(request.getId());
@@ -146,6 +154,8 @@ public class UserPlanServiceImpl implements UserPlanService {
         employerContributionAmount.setEmployer_contribution_amount_HSA(employerContributionToUserHSA);
         return employerContributionAmount;
     }
+
+    //getUserPlanById: This method retrieves a user plan by ID. It fetches user and employer contributions, validates them, and constructs a response with all relevant details.
     public RecurringPlanResponse getUserPlanById(String id) throws ParseException{
         RecurringPlanResponse response=new RecurringPlanResponse();
         Optional<UserRecurringPlanDetails> userRecurringPlanDetailsOptional = userRecurringPlanDetailsRepository.findByUserId(id);
@@ -197,6 +207,8 @@ public class UserPlanServiceImpl implements UserPlanService {
         }
         return response;
     }
+
+    //getAllUsersPlan: This method retrieves all user plans. It fetches user and employer contributions for each user, validates them, and constructs responses for all users.
     public List<RecurringPlanResponse> getAllUsersPlan() throws ParseException{
         List<RecurringPlanResponse> responseList = new ArrayList<>();
         List<UserRecurringPlanDetails> userDetailsList = userRecurringPlanDetailsRepository.findAll();
@@ -231,6 +243,8 @@ public class UserPlanServiceImpl implements UserPlanService {
         }
         return responseList;
     }
+
+    //editUserContributions: This method allows editing user contributions based on the provided request and user ID. It retrieves existing user contributions, updates them with new values, and returns the updated contributions.
     public RecurringPlanUserResponse editUserContributions(RecurringPlanUserRequest request,String id) throws ParseException {
         // Retrieve the existing user contributions based on the provided user ID
         Optional<UserRecurringPlanDetails> userRecurringPlanDetailsOptional = userRecurringPlanDetailsRepository.findByUserId(id);
@@ -295,6 +309,9 @@ public class UserPlanServiceImpl implements UserPlanService {
             throw new NoSuchElementException("UserRecurringPlanDetails not found");
         }
     }
+
+    //editEmployerContributions: This method allows editing employer contributions based on the provided request and user ID.
+    // It retrieves existing employer contributions, updates them with new values, and returns the updated contributions.
     public RecurringPlanEmployerResponse editEmployerContributions(RecurringPlanEmployerRequest request,String id) {
         // Check if user employer in the database
         Optional<EmployerContributionsToUser> employeeId = employerContributionsToUserRepository.findByEmployeeId(id);
@@ -347,6 +364,8 @@ public class UserPlanServiceImpl implements UserPlanService {
             throw new NoSuchElementException("EmployerContributionsToUser not found");
         }
     }
+
+    //getEmployerContributionAmount: This method constructs an employer contribution amount object based on employer contributions to the user.
     private static EmployerContributionAmount getEmployerContributionAmount(EmployerContributionsToUser employerContributionsToUser) {
         EmployerContributionAmount employerContributionAmount = new EmployerContributionAmount();
         employerContributionAmount.setMessage(RecurringPlanConstants.SUCCESS_MESSAGE_EMPLOYER_CONTRIBUTION_AMOUNT);
@@ -356,6 +375,8 @@ public class UserPlanServiceImpl implements UserPlanService {
         employerContributionAmount.setEmployer_contribution_amount_ROTHIRA(employerContributionsToUser.getEmployer_contribution_limit_ROTHIRA());
         return employerContributionAmount;
     }
+
+    //getSelfContributionAmount: This method constructs a self-contribution amount object based on user recurring plan details.
     private static SelfContributionAmount getSelfContributionAmount(UserRecurringPlanDetails userRecurringPlanDetails) {
         SelfContributionAmount selfContributionAmount = new SelfContributionAmount();
         selfContributionAmount.setSelf_contribution_amount_401K(userRecurringPlanDetails.getSelf_contribution_limit_401K());
@@ -364,6 +385,8 @@ public class UserPlanServiceImpl implements UserPlanService {
         selfContributionAmount.setSelf_contribution_amount_ROTHIRA(userRecurringPlanDetails.getSelf_contribution_limit_ROTHIRA());
         return selfContributionAmount;
     }
+
+    //calculateTotalRecurringPlanContributions: This method calculates the total recurring plan contributions considering both user and employer contributions for FSA and ensures the total doesn't exceed the limit.
     private TotalContributionAmount calculateTotalRecurringPlanContributions(SelfContributionAmount selfContributionAmount, EmployerContributionAmount employerContributionAmount){
         TotalContributionAmount totalContributionAmount=new TotalContributionAmount();
         totalContributionAmount.setTotal_contribution_amount_401k(selfContributionAmount.getSelf_contribution_amount_401K()+employerContributionAmount.getEmployer_contribution_amount_401k());
@@ -398,6 +421,8 @@ public class UserPlanServiceImpl implements UserPlanService {
         return totalContributionAmount;
 
     }
+
+    //calculateAge: This static method calculates the age based on the provided date of birth.
     public static int calculateAge(Date dob) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
         String dateOfBirthString = format.format(dob); // Convert Date to String in desired format

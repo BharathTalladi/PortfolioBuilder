@@ -1,13 +1,14 @@
 package com.investment.employeerecurringplans.service;
 
-import com.investment.employeerecurringplans.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
-//import java.util.Map;
-
 public interface JWTService {
+    // Method to extract username from JWT token
     String extractUsername(String token);
-    String generateToken(String userId);
-    boolean validateToken(String token, UserDetails userDetails);
 
+    // Method to generate JWT token for a given user ID
+    String generateToken(String userId);
+
+    // Method to validate JWT token against UserDetails
+    boolean validateToken(String token, UserDetails userDetails);
 }

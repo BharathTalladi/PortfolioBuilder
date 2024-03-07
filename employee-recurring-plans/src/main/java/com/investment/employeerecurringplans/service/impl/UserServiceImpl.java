@@ -14,12 +14,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    // Override method to provide UserDetailsService
     @Override
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-                return userRepository.findById(id).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+                // Load user by ID from the repository
+                return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             }
         };
     }

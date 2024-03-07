@@ -9,7 +9,7 @@ const HeaderComponent = () => {
     const navigate=useNavigate();
     function logout(){
         logoutUser();
-        navigate('login');
+        navigate('/login');
     }
 
     return (

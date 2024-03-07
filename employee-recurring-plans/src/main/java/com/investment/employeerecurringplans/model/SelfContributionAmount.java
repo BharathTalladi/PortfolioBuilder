@@ -8,8 +8,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SelfContributionAmount {
+    // Amount of self-contribution to 401K
     private Double self_contribution_amount_401K;
+
+    // Amount of self-contribution to HSA
     private Double self_contribution_amount_HSA;
+
+    // Amount of self-contribution to FSA
     private Double self_contribution_amount_FSA;
+
+    // Amount of self-contribution to ROTH IRA
     private Double self_contribution_amount_ROTHIRA;
 }

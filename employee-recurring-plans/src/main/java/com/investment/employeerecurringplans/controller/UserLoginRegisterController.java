@@ -19,13 +19,17 @@ public class UserLoginRegisterController {
 
     private final UserLoginRegisterService userLoginRegisterService;
 
+    // Endpoint for user registration
     @PostMapping("/register")
     private ResponseEntity<RegistrationResponse> register(@RequestBody RegistrationRequest registrationRequest){
+        // Call the service to handle user registration and return the response
         return ResponseEntity.ok(userLoginRegisterService.registerUser(registrationRequest));
     }
 
+    // Endpoint for user login
     @PostMapping("/login")
     private ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest){
+        // Call the service to handle user authentication and return the response
         return ResponseEntity.ok(userLoginRegisterService.authenticate(loginRequest));
     }
 }

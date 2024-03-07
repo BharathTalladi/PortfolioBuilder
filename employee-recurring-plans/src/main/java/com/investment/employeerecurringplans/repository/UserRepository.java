@@ -8,6 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-    Optional<User> findByEmailId(String emailId);
 
+    // Method to find a User entity by its emailId
+    // Spring Data JPA automatically generates the query based on the method name
+    Optional<User> findByEmailId(String emailId);
 }
