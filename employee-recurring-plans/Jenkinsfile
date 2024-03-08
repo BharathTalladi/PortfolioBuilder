@@ -13,7 +13,7 @@ pipeline{
         stage('Build Docker Image'){
             steps{
                 script {
-                  bat 'docker build -t talladi412/employee-recurring-plans.jar .'
+                  bat 'docker build -t talladi412/employee-recurring-plans .'
                 }
             }
         }
@@ -22,14 +22,14 @@ pipeline{
                 script {
                    withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
                                         bat 'docker login -u talladi412 -p %dockerhubpwd%'}
-                  bat 'docker push talladi412/employee-recurring-plans.jar'
+                  bat 'docker push talladi412/employee-recurring-plans'
                 }
             }
         }
         stage('Deploy to K8s'){
             steps{
                 script {
-                    kubernetesDeploy(kubeconfigId: 'k8sconfigpwd',configs: 'app-deployment.yml')
+                    kubernetesDeploy(kubeconfigId: 'k8sconfigpwd', yamlFile: 'app-deployment.yml')
                 }
             }
         }

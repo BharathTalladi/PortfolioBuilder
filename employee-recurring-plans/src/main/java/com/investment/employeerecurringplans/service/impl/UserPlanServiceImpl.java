@@ -6,6 +6,7 @@ import com.investment.employeerecurringplans.entity.EmployerContributionsToUser;
 import com.investment.employeerecurringplans.entity.UserRecurringPlanDetails;
 import com.investment.employeerecurringplans.exceptions.CurrentYearRecurringPlanNotFoundException;
 import com.investment.employeerecurringplans.exceptions.RecurringPlanContributionException;
+import com.investment.employeerecurringplans.exceptions.RecurringPlanLimitsException;
 import com.investment.employeerecurringplans.exceptions.UserPlanDetailsNotFoundException;
 import com.investment.employeerecurringplans.model.*;
 import com.investment.employeerecurringplans.repository.EmployerContributionsToUserRepository;
@@ -57,7 +58,7 @@ public class UserPlanServiceImpl implements UserPlanService {
         // Calculate 401K contribution limit
         double _401k = request.getSelf_contribution_limit_401K();
         if (_401k > 6) {
-            throw new RecurringPlanContributionException("You cannot contribute more than 6% of your salary to 401K Plan");
+            throw new RecurringPlanLimitsException("You cannot contribute more than 6% of your salary to 401K Plan");
         }
         double _401kContribution = _401k * request.getSalary() / 100;
         selfContributionAmount.setSelf_contribution_amount_401K(_401kContribution);
@@ -67,14 +68,14 @@ public class UserPlanServiceImpl implements UserPlanService {
         int age = calculateAge(request.getDob());
         double hsaLimit = (age > 55) ? 5150 : 4150;
         if (hsa > hsaLimit) {
-            throw new RecurringPlanContributionException("As your age is " + (age > 55 ? "greater" : "less") + " than 55, you cannot contribute more than $ " + hsaLimit + " to your HSA Account, Please contribute less than $" + hsaLimit);
+            throw new RecurringPlanLimitsException("As your age is " + (age > 55 ? "greater" : "less") + " than 55, you cannot contribute more than $ " + hsaLimit + " to your HSA Account, Please contribute less than $" + hsaLimit);
         }
         selfContributionAmount.setSelf_contribution_amount_HSA(hsa);
         details.setSelf_contribution_limit_HSA(hsa);
         // Calculate FSA contribution limit
         double fsa = request.getSelf_contribution_limit_FSA();
         if (fsa > 3200) {
-            throw new RecurringPlanContributionException("You cannot contribute more than $3200 to your FSA Account, Please contribute less than $3200");
+            throw new RecurringPlanLimitsException("You cannot contribute more than $3200 to your FSA Account, Please contribute less than $3200");
         }
         selfContributionAmount.setSelf_contribution_amount_FSA(fsa);
         details.setSelf_contribution_limit_FSA(fsa);
@@ -82,7 +83,7 @@ public class UserPlanServiceImpl implements UserPlanService {
         double rothIra = request.getSelf_contribution_limit_ROTHIRA();
         double rothIraLimit = (age>50)? 8000 : 7000;
         if(rothIra>rothIraLimit){
-            throw new RecurringPlanContributionException("As your age is " + (age > 50 ? "greater" : "less") + " than 50, you cannot contribute more than $ " + rothIraLimit + " to your RothIRA Account, Please contribute less than $" + rothIraLimit);
+            throw new RecurringPlanLimitsException("As your age is " + (age > 50 ? "greater" : "less") + " than 50, you cannot contribute more than $ " + rothIraLimit + " to your RothIRA Account, Please contribute less than $" + rothIraLimit);
         }
         selfContributionAmount.setSelf_contribution_amount_ROTHIRA(rothIra);
         details.setSelf_contribution_limit_ROTHIRA(rothIra);
@@ -132,18 +133,18 @@ public class UserPlanServiceImpl implements UserPlanService {
         double user401kContribution = userRequest.getSelf_contribution_limit_401K();
         double employer401kContribution = employerRequest.getEmployer_contribution_limit_401k() ;
         if (employer401kContribution != user401kContribution) {
-            throw new RecurringPlanContributionException("Employer should match 401k with user 401k Plan");
+            throw new RecurringPlanLimitsException("Employer should match 401k with user 401k Plan");
         }
         employerContributionsToUser.setEmployer_contribution_limit_401K(employer401kContribution);
         employerContributionAmount.setEmployer_contribution_amount_401k(employer401kContribution);
         double employerContributionToUserFSA = employerRequest.getEmployer_contribution_limit_FSA();
         if (employerContributionToUserFSA > 3200) {
-            throw new RecurringPlanContributionException("Employer cannot contribute more than $3200 to User FSA Account");
+            throw new RecurringPlanLimitsException("Employer cannot contribute more than $3200 to User FSA Account");
         }
         employerContributionsToUser.setEmployer_contribution_limit_FSA(employerContributionToUserFSA);
         double employerContributionToUserHSA = employerRequest.getEmployer_contribution_limit_HSA();
         if (employerContributionToUserHSA > 2100) {
-            throw new RecurringPlanContributionException("Employer cannot contribute more than $2100 to User HSA Account");
+            throw new RecurringPlanLimitsException("Employer cannot contribute more than $2100 to User HSA Account");
         }
         employerContributionsToUser.setEmployer_contribution_limit_HSA(employerContributionToUserHSA);
         employerContributionsToUser.setEmployer_contribution_limit_ROTHIRA(employerRequest.getEmployer_contribution_limit_ROTHIRA());
@@ -274,32 +275,32 @@ public class UserPlanServiceImpl implements UserPlanService {
             if (userRequest.getSelf_contribution_limit_401K() != null) {
                 double contribution401K = userRequest.getSelf_contribution_limit_401K();
                 if (contribution401K > (userRecurringPlanDetails.getSalary())*6/100) {
-                    throw new RecurringPlanContributionException("User cannot contribute more than 6% of salary to their 401k account");
+                    throw new RecurringPlanLimitsException("User cannot contribute more than 6% of salary to their 401k account");
                 }
                 userRecurringPlanDetails.setSelf_contribution_limit_401K(contribution401K);
             }
             if (userRequest.getSelf_contribution_limit_HSA() != null) {
                 double contributionHSA = userRequest.getSelf_contribution_limit_HSA();
                 if (age > 55 && contributionHSA > 5500) {
-                    throw new RecurringPlanContributionException("As your age is greater than 55, You cannot contribute more than $5500 to your HSA Account");
+                    throw new RecurringPlanLimitsException("As your age is greater than 55, You cannot contribute more than $5500 to your HSA Account");
                 } else if (age < 55 && contributionHSA > 4500) {
-                    throw new RecurringPlanContributionException("As your age is less than 55, You cannot contribute more than $4500 to your HSA Account");
+                    throw new RecurringPlanLimitsException("As your age is less than 55, You cannot contribute more than $4500 to your HSA Account");
                 }
                 userRecurringPlanDetails.setSelf_contribution_limit_HSA(contributionHSA);
             }
             if (userRequest.getSelf_contribution_limit_FSA() != null) {
                 double contributionFSA = userRequest.getSelf_contribution_limit_FSA();
                 if (contributionFSA > 3200) {
-                    throw new RecurringPlanContributionException("You cannot contribute more than $3200 to your FSA Account");
+                    throw new RecurringPlanLimitsException("You cannot contribute more than $3200 to your FSA Account");
                 }
                 userRecurringPlanDetails.setSelf_contribution_limit_FSA(contributionFSA);
             }
             if (userRequest.getSelf_contribution_limit_ROTHIRA() != null) {
                 double contributionROTHIRA = userRequest.getSelf_contribution_limit_ROTHIRA();
                 if (age < 50 && contributionROTHIRA > 7000) {
-                    throw new RecurringPlanContributionException("As your age is less than 50, You cannot contribute more than $7000 to your ROTH IRA Account");
+                    throw new RecurringPlanLimitsException("As your age is less than 50, You cannot contribute more than $7000 to your ROTH IRA Account");
                 } else if (age > 50 && contributionROTHIRA > 8000) {
-                    throw new RecurringPlanContributionException("As your age is greater than 50, You cannot contribute more than $8000 to your ROTH IRA Account");
+                    throw new RecurringPlanLimitsException("As your age is greater than 50, You cannot contribute more than $8000 to your ROTH IRA Account");
                 }
                 userRecurringPlanDetails.setSelf_contribution_limit_ROTHIRA(contributionROTHIRA);
             }
@@ -337,21 +338,21 @@ public class UserPlanServiceImpl implements UserPlanService {
             // Calculate employer's 401k contribution based on user's salary and contribution percentage
             if (employerRequest.getEmployer_contribution_limit_401k() != null) {
                 if (!employerRequest.getEmployer_contribution_limit_401k().equals(userRecurringPlanDetails.getSelf_contribution_limit_401K())) {
-                    throw new RecurringPlanContributionException("Employer should match employee 401k Plan");
+                    throw new RecurringPlanLimitsException("Employer should match employee 401k Plan");
                 }
                 employerContributionsToUser.setEmployer_contribution_limit_401K(employerRequest.getEmployer_contribution_limit_401k() );
             }
             if (employerRequest.getEmployer_contribution_limit_HSA() != null) {
                 double limitHSA = employerRequest.getEmployer_contribution_limit_HSA();
                 if (limitHSA > 2100) {
-                    throw new RecurringPlanContributionException("Employer cannot contribute more than $2100 to employee HSA Account");
+                    throw new RecurringPlanLimitsException("Employer cannot contribute more than $2100 to employee HSA Account");
                 }
                 employerContributionsToUser.setEmployer_contribution_limit_HSA(limitHSA);
             }
             if (employerRequest.getEmployer_contribution_limit_FSA() != null) {
                 double limitFSA = employerRequest.getEmployer_contribution_limit_FSA();
                 if (limitFSA > 3200) {
-                    throw new RecurringPlanContributionException("Employer cannot contribute more than $3200 to employee FSA Account");
+                    throw new RecurringPlanLimitsException("Employer cannot contribute more than $3200 to employee FSA Account");
                 }
                 employerContributionsToUser.setEmployer_contribution_limit_FSA(limitFSA);
             }

@@ -48,6 +48,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.OK); // Returning error response with HTTP status code
     }
 
+    // Exception handler for RecurringPlanLimitsException
+    @ExceptionHandler(RecurringPlanLimitsException.class)
+    public ResponseEntity<?> handleRecurringPlanLimitsException(RecurringPlanLimitsException exception, WebRequest request){
+        ErrorResponse errorDetails =
+                new ErrorResponse(
+                        request.getDescription(false), // Description of the error request
+                        HttpStatus.CONTINUE, // HTTP status code
+                        exception.getMessage(), // Error message from the exception
+                        LocalDateTime.now()); // Timestamp of the error
+        return new ResponseEntity<>(errorDetails, HttpStatus.OK); // Returning error response with HTTP status code
+    }
+
     // Exception handler for other unhandled exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globalExceptionHandling(Exception exception, WebRequest request){
