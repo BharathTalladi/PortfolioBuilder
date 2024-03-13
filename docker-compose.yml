@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: db
+    image: mysql:8.0.27
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: EMPLOYEERECURRINGPLANS
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: root
+    networks:
+      - shared-network
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-config:/etc/mysql
+      - db-data:/var/lib/mysql
+      - ./db/backup/files:/data_backup/data
+
+  employee-recurring-plans-frontend:
+    container_name: portfolio-builder-frontend
+    image: talladi412/portfolio-builder-frontend:1.0.0
+    build:
+      context: ./employee-recurring-plans-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5763:5763"
+    networks:
+      - shared-network
+
+  employee-recurring-plans-backend:
+    container_name: portfolio-builder-backend
+    image: talladi412/portfolio-builder-backend:1.0.0
+    build:
+      context: ./employee-recurring-plans
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/EMPLOYEERECURRINGPLANS?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    networks:
+      - shared-network
+    depends_on:
+      - db
+      - employee-recurring-plans-frontend
+
+networks:
+  shared-network:
+
+volumes:
+  db-config:
+  db-data:
