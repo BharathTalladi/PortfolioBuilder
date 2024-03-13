@@ -4,17 +4,20 @@ pipeline {
         maven 'maven_3_9_5'
     }
     stages {
-        stage('Build Maven') {
-            steps {
-                // Checkout the code into a directory named 'backend'
-                checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/BharathTalladi/PortfolioBuilder.git']]),
-                into: 'employee-recurring-plans'
-                // Execute Maven inside the 'backend' directory
-                dir('employee-recurring-plans') {
-                    bat 'mvn clean install -DskipTests'
-                }
-            }
-        }
+         stage('Build Maven') {
+                    steps {
+                        // Checkout the code into a directory named 'backend'
+                        checkout scm: [$class: 'GitSCM',
+                                     branches: [[name: '*/master']],
+                                     extensions: [],
+                                     userRemoteConfigs: [[url: 'https://github.com/BharathTalladi/PortfolioBuilder.git']]],
+                        into: 'employee-recurring-plans'
+                        // Execute Maven inside the 'backend' directory
+                        dir('employee-recurring-plans') {
+                            bat 'mvn clean install -DskipTests'
+                        }
+                    }
+         }
         stage('Build Backend Docker Image') {
             steps {
                 script {
