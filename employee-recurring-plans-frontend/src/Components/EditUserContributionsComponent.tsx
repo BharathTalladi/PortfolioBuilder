@@ -26,13 +26,12 @@ const EditUserContributionsComponent=()=>{
     const[self_contribution_limit_FSA,setSelf_Contribution_Limit_FSA]=useState<number>(location?.state?.userPlanData?.self_contribution_limit_FSA);
     const[self_contribution_limit_ROTHIRA,setSelf_Contribution_Limit_ROTHIRA]=useState<number>(location?.state?.userPlanData?.self_contribution_limit_ROTHIRA);
     const navigate=useNavigate();
-
+    const [errorMessage, setErrorMessage] = useState('');
     const [salaryError, setSalaryError] = useState(false);
     const [selfContributionLimit401KError, setSelfContributionLimit401KError] = useState(false);
     const [selfContributionLimitHSAError, setSelfContributionLimitHSAError] = useState(false);
     const [selfContributionLimitFSAError, setSelfContributionLimitFSAError] = useState(false);
     const [selfContributionLimitROTHIRAError, setSelfContributionLimitROTHIRAError] = useState(false);
-      
     async function updateUserContributions(){
         if(!salary && !self_contribution_limit_401K && !self_contribution_limit_HSA && !self_contribution_limit_FSA && !self_contribution_limit_ROTHIRA){
         setSalaryError(true);
@@ -48,13 +47,13 @@ const EditUserContributionsComponent=()=>{
         setSelfContributionLimitFSAError(false);
         setSelfContributionLimitROTHIRAError(false);
         const editUserContributionDetails={salary,self_contribution_limit_401K,self_contribution_limit_HSA,self_contribution_limit_FSA,self_contribution_limit_ROTHIRA};
-        console.log(editUserContributionDetails);
         await editUserContributions(id,editUserContributionDetails).then((response)=>{
-            navigate(`/getUserPlanById/${id}`, {
+          console.log(response.data.errorMessage);
+          response.data?.errorMessage ? setErrorMessage(response.data.errorMessage) 
+           : navigate(`/getUserPlanById/${id}`, {
               state: {
                 ...location.state, // Keep the existing state
                 userPlanData: { // Update the userPlanData with the edited values
-                  ...location.state.userPlanData,
                   salary: salary,
                   self_contribution_limit_401K: self_contribution_limit_401K,
                   self_contribution_limit_HSA: self_contribution_limit_HSA,
@@ -92,8 +91,13 @@ const EditUserContributionsComponent=()=>{
                     <TextField value={self_contribution_limit_ROTHIRA} name='self_contribution_amount_ROTHIRA' label="Edit Self ROTH IRA Contribution" error={selfContributionLimitROTHIRAError}
                       sx={{ m: 1 }} id="self_contribution_amount_ROTHIRA" margin="normal" fullWidth autoFocus onChange={(s)=> {setSelf_Contribution_Limit_ROTHIRA(Number(s.target.value)),setSelfContributionLimitROTHIRAError(!s.target.value)}} required/> 
                     {selfContributionLimitROTHIRAError && <Typography variant="body2" color="error">Self ROTHIRA Contribution is required.</Typography>}
+                    {errorMessage && (
+                            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                                {errorMessage}
+                            </Typography>
+            )}
                     <Button sx={{ mt:0.8,marginLeft: "auto",backgroundColor: "#FFF" }} variant="contained" onClick={(updateUserContributions)}>
-                      <NavLink to={`/getUserPlanById/${id}`}>Save</NavLink>
+                      <NavLink to={``}>Save</NavLink>
                     </Button>
                     <Button sx={{ mt:0.8, marginLeft: "12px",backgroundColor: "#FFF" }} variant="contained"><NavLink to={`/getUserPlanById/${id}`}>Cancel</NavLink></Button>
             </Box>

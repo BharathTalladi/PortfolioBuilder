@@ -19,15 +19,21 @@ const CreateUserRecurringPlanByEmployerComponent = ()=>{
     const[employer_contribution_limit_HSA,setEmployer_Contribution_Limit_HSA]=useState<number>();
     const[employer_contribution_limit_FSA,setEmployer_Contribution_Limit_FSA]=useState<number>();
     const[employer_contribution_limit_ROTHIRA,setEmployer_Contribution_Limit_ROTHIRA]=useState<number>();
-  
+    const [errorMessage, setErrorMessage] = useState('');
 
     async function addEmployerContributions(){
         const addEmployerContributionsPayLoad={id,employer_contribution_limit_401k,employer_contribution_limit_HSA,employer_contribution_limit_FSA,employer_contribution_limit_ROTHIRA};
         console.log(addEmployerContributionsPayLoad);
+        if( !employer_contribution_limit_401k || !employer_contribution_limit_HSA || !employer_contribution_limit_FSA || !employer_contribution_limit_ROTHIRA) {
+            setErrorMessage("Please fill out all the fields");
+          }
+          else{
         await createUserPlanByEmployer(addEmployerContributionsPayLoad).then((response)=>{
             console.log(response);
-            navigate(`/getAllUsersPlan`);
+            response.data?.errorMessage? setErrorMessage(response.data.errorMessage)
+            : navigate(`/getAllUsersPlan`);
         })
+    }
     }
 
 
@@ -87,7 +93,13 @@ const CreateUserRecurringPlanByEmployerComponent = ()=>{
             <TextField value={employee_contribution_limit_ROTHIRA} name='employee_contribution_amount_ROTHIRA' label="Employee ROTHIRA Contribution" 
             sx={{ m: 1 }} id="employee_contribution_amount_ROTHIRA" margin="normal" fullWidth autoFocus disabled/>
             </Grid>
+            
             <Grid item xs={12}>
+            {errorMessage && (
+                            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                                {errorMessage}
+                            </Typography>
+            )}
                 <Button sx={{ mt:0.8,marginLeft: "auto",backgroundColor: "#FFF" }} variant="contained" onClick={addEmployerContributions}><NavLink to={""}>Save</NavLink></Button>
                 <Button sx={{ mt:0.8, marginLeft: "12px",backgroundColor: "#FFF" }} variant="contained"><NavLink to={`/getAllUsersPlan`}>Cancel</NavLink></Button>
             </Grid>

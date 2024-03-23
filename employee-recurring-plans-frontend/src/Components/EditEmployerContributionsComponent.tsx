@@ -16,17 +16,21 @@ const EditEmployerContributionsComponent = () => {
   const [employee_contribution_limit_HSA]=useState<number>(location?.state?.userPlanEmployerData?.self_contribution_limit_FSA);
   const [employee_contribution_limit_FSA]=useState<number>(location?.state?.userPlanEmployerData?.self_contribution_limit_HSA);
   const [employee_contribution_limit_ROTHIRA]=useState<number>(location?.state?.userPlanEmployerData?.self_contribution_limit_ROTHIRA);
-
+  const [errorMessage, setErrorMessage] = useState('');
 
 
   async function updateEmployerContributions(){
     const editEmployerContributionDetails={employer_contribution_limit_401k,employer_contribution_limit_HSA,employer_contribution_limit_FSA,employer_contribution_limit_ROTHIRA};
-    await editEmployerContributions(id,editEmployerContributionDetails).then(()=>{
-      navigate(`/getAllUsersPlan`, {
+    if( !employer_contribution_limit_401k || !employer_contribution_limit_HSA || !employer_contribution_limit_FSA || !employer_contribution_limit_ROTHIRA) {
+      setErrorMessage("Please fill out all the fields");
+    }
+    else{
+    await editEmployerContributions(id,editEmployerContributionDetails).then((response)=>{
+      response.data?.errorMessage? setErrorMessage(response.data.errorMessage) 
+     : navigate(`/getAllUsersPlan`, {
         state: {
           ...location.state, // Keep the existing state
           userPlanData: { // Update the userPlanData with the edited values
-            ...location.state.userPlanEmployerData,
             employer_contribution_limit_401k: employer_contribution_limit_401k,
             employer_contribution_limit_HSA: employer_contribution_limit_HSA,
             employer_contribution_limit_FSA: employer_contribution_limit_FSA,
@@ -37,6 +41,7 @@ const EditEmployerContributionsComponent = () => {
     }).catch(error => {
     console.error(error);
   })
+}
   }
 
 
@@ -86,9 +91,14 @@ const EditEmployerContributionsComponent = () => {
             <Grid item xs={4}>
             <TextField  value={employee_contribution_limit_ROTHIRA} name="employee_contribution_limit_ROTHIRA"  label="Employee ROTH IRA Contribution"  sx={{ m: 1 }} id="employee_contribution_limit_ROTHIRA"  margin="normal"  fullWidth  autoFocus disabled />
             </Grid>
+            {errorMessage && (
+                            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                                {errorMessage}
+                            </Typography>
+            )}
             <Grid item xs={12}>
                 <Button sx={{ mt: 0.8, marginLeft: "auto", backgroundColor: "#FFF" }} variant="contained" onClick={(updateEmployerContributions)} >
-				<NavLink to={`/getAllUsersPlan`}>Save</NavLink>
+				<NavLink to={``}>Save</NavLink>
 				</Button>
                 <Button sx={{ mt: 0.8, marginLeft: "12px", backgroundColor: "#FFF" }} variant="contained">
 				<NavLink to={`/getAllUsersPlan`}>Cancel</NavLink>

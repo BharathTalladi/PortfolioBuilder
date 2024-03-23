@@ -14,14 +14,20 @@ const CreateRecurringPlanByUserComponent =()=>{
     const[self_contribution_limit_HSA,setSelf_Contribution_Limit_HSA]=useState<number>();
     const[self_contribution_limit_FSA,setSelf_Contribution_Limit_FSA]=useState<number>();
     const[self_contribution_limit_ROTHIRA,setSelf_Contribution_Limit_ROTHIRA]=useState<number>();
-    
+    const [errorMessage, setErrorMessage] = useState('');
     async function createPlanByUser(){
-        const createPlanByUserPayLoad = { id:userId,dob,salary,self_contribution_limit_401K,self_contribution_limit_HSA,self_contribution_limit_FSA, self_contribution_limit_ROTHIRA};
+        const createPlanByUserPayLoad = { id:userId,dob,salary,self_contribution_limit_401K,self_contribution_limit_HSA,self_contribution_limit_FSA, self_contribution_limit_ROTHIRA} ;
         console.log(createPlanByUserPayLoad);
+        if(!salary || !dob || !self_contribution_limit_401K || !self_contribution_limit_HSA || !self_contribution_limit_FSA || !self_contribution_limit_ROTHIRA) {
+          setErrorMessage("Please fill out all the fields");
+        }
+        else{
         await createUserPlan(createPlanByUserPayLoad).then((response)=>{
           console.log(response);
-          navigate(`/getUserPlanById/${userId}`);
+          response.data?.errorMessage? setErrorMessage(response.data.errorMessage) 
+          : navigate(`/getUserPlanById/${userId}`);
         });
+      }
     };
 
     return(
@@ -69,8 +75,13 @@ const CreateRecurringPlanByUserComponent =()=>{
         <FormHelperText  sx={{ m: 1, fontWeight: 'bold',color: "secondary.main"}} >Employee can only contribute maximum of $8000 if age is more than 50yrs or else $7000 to ROTH IRA Account</FormHelperText>
         </Grid>
         </Grid>
+        {errorMessage && (
+                            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                                {errorMessage}
+                            </Typography>
+            )}
         <Button sx={{ mt:0.8, marginLeft: "12px",backgroundColor: "#FFF" }} variant="contained"  onClick={(createPlanByUser)}>
-          <NavLink to={`/getUserPlanById/${userId}`}>Save</NavLink>
+         <NavLink to={``}>Save</NavLink>
         </Button>
         <Button sx={{ mt:0.8, marginLeft: "12px",backgroundColor: "#FFF" }} variant="contained">
           <NavLink to={`/getUserPlanById/${userId}`}>Cancel</NavLink>
