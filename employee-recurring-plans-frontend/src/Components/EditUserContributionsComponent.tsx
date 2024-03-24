@@ -54,6 +54,7 @@ const EditUserContributionsComponent=()=>{
               state: {
                 ...location.state, // Keep the existing state
                 userPlanData: { // Update the userPlanData with the edited values
+                  ...location.state.userPlanData,
                   salary: salary,
                   self_contribution_limit_401K: self_contribution_limit_401K,
                   self_contribution_limit_HSA: self_contribution_limit_HSA,
