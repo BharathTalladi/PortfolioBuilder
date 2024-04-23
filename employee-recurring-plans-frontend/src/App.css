@@ -54,7 +54,7 @@ justify-content: center !important;
 }
 
 .css-rqglhn-MuiTable-root {
-  margin-top: 2rem;
+margin-top: 2rem;
 width: 95% !important;
 margin-left: auto;
 margin-right: auto;
@@ -64,6 +64,7 @@ margin-right: auto;
 .TableContainer {
   margin-top: 4rem;
   margin-bottom: 2rem;
+  scrollbar-width: none;
   /* border-radius: 20px;
   height: 800px;
   padding: 0;
@@ -114,4 +115,17 @@ margin-right: auto;
 
 .css-11xur9t-MuiPaper-root-MuiTableContainer-root {
    background-color: none !important;
+}
+
+ul {
+  list-style-type: none;
+  margin-left: -2rem;
+}
+
+thead {
+  position: sticky !important;
+}
+
+.css-1ex1afd-MuiTableCell-root {
+  padding: 10px !important;
 }

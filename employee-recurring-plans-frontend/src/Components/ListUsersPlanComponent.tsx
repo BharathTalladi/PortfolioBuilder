@@ -57,6 +57,7 @@ const ListUsersPlanComponent = () => {
       <Typography variant="h6" sx={{  mt:2}}>
         Employee's Investment Recurring Plans
       </Typography>
+      
       <Table>
         <TableHead>
           <TableRow>
@@ -67,13 +68,14 @@ const ListUsersPlanComponent = () => {
             <TableCell>Total Retirement Contributions</TableCell>
           </TableRow>
         </TableHead>
+        </Table>
+        <div style={ {overflowX: 'auto', maxHeight: '850px', scrollbarWidth:'none'} }>
+        <Table>
         <TableBody>
           {userPlans.map((userPlan) => (
             <TableRow key={userPlan.id}>
-              <TableCell>{userPlan.id}</TableCell>
-              <TableCell>
-                ${userPlan.salary}
-              </TableCell>
+              <TableCell><ul><li>{userPlan.id}</li></ul></TableCell>
+              <TableCell><ul><li> ${userPlan.salary}</li></ul></TableCell>
               <TableCell>
                 <ul>
                   <li>401(k): $ {userPlan.selfContributionAmount.self_contribution_amount_401K}</li>
@@ -92,7 +94,7 @@ const ListUsersPlanComponent = () => {
                   <li>HSA: ${userPlan.employerContributionAmount.employer_contribution_amount_HSA}</li>
                   <li>FSA: ${userPlan.employerContributionAmount.employer_contribution_amount_FSA}</li>
                   <li>ROTHIRA: ${userPlan.employerContributionAmount.employer_contribution_amount_ROTHIRA}</li>
-                  <Button  fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={()=> navigate(`/editEmployerContributions/${userPlan.id}`, {
+                  <li><Button  variant="contained" sx={{ mt: 3, mb: 2 }} onClick={()=> navigate(`/editEmployerContributions/${userPlan.id}`, {
                                             state: {
                                                 userPlanEmployerData: {
                                                   employee_id:userPlan.id,
@@ -108,8 +110,9 @@ const ListUsersPlanComponent = () => {
                                                 },
                                             }
                     })}>
-                    Edit Employer Contributions 
+                    Edit
                   </Button>
+                  </li>
                 </ul>
               </TableCell>
               <TableCell>
@@ -124,7 +127,7 @@ const ListUsersPlanComponent = () => {
                 ):(
                   <>
                   <TableCell>
-                    <Button  fullWidth variant="contained" sx={{ mt: 2, mb: 1 }} onClick={()=> navigate(`/createUserPlanByEmployer?${userPlan.id}`,{
+                    <Button  variant="contained" sx={{ mt: 3, mb: 2 }} onClick={()=> navigate(`/createUserPlanByEmployer?${userPlan.id}`,{
                                             state: {
                                               userPlanEmployerData: {
                                                 employee_id:userPlan.id,
@@ -135,11 +138,12 @@ const ListUsersPlanComponent = () => {
                                                 self_contribution_limit_ROTHIRA:userPlan.selfContributionAmount.self_contribution_amount_ROTHIRA
                                               },
                                             }
-                    })}>Add Employer Contributions
+                    })}>
+                    Add
                     </Button>
                   </TableCell>
                   <TableCell>
-                    After Employer Contributes Total Contributions will be calculated
+                    Please add employer contributions
                   </TableCell>
                   </>
                 )
@@ -148,6 +152,7 @@ const ListUsersPlanComponent = () => {
           ))}
         </TableBody>
       </Table>
+        </div>
     </TableContainer>
   );
 };
